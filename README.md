@@ -3,6 +3,7 @@
 Detect copy-pasted and structurally similar code in your Scss stylesheets.
 
 * [Overview](#overview)
+* [Installation](#installation)
 * [Usage](#usage)
 
 ## Overview
@@ -11,6 +12,9 @@ One example means more than thousand words:
 
 ![screenshot](images/screenshot_0.0.1.png)
 
+## Installation
+
+![screenshot](images/installation_0.0.1.png)
 
 ## Usage
 
