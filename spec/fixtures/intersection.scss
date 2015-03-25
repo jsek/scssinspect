@@ -1,0 +1,17 @@
+//.intersectionA {
+    .sub-selector1, .sub-selector2 {
+        border: 2px solid red;
+        color: blue;
+        z-index: 11;
+    }
+//}
+
+//.intersectionB {
+    .sub-selector1, 
+    .sub-selector2 { // >
+        z-index: 11; /*?
+        */
+        color: blue; 
+        border: 2px solid red;
+    }
+//}

@@ -1,0 +1,7 @@
+
+div { color: red; border: none; }
+.a,.b { color: #fff; }
+#c {
+    color: blue; 
+    .a,.b { color: #fff; }
+}
