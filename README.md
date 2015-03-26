@@ -50,8 +50,7 @@ be used in place of the defaults listed above. For example:
  - Parser issues
     - throws error while parsing selector with interpolation
     
- - Required patch for `gonzales-pe`
-    - gonzales.css-to-ast.js:1308
+ - Parser patch 1: gonzales.css-to-ast.js:1308 (adding end location for ruleset)
     
 ``` javascript
 if (needInfo)
@@ -65,7 +64,12 @@ if (needInfo)
     return x;
 }
 ```
+
+ - Parser patch 2: gonzales.css-to-ast.js:1671 (increasing line number while parsing block comments)
     
- - Misplaced diff after commented rulesets
- 
-![screenshot](images/issue_commented-code.png)
+``` javascript
+c = css.charAt(pos);
+cn = css.charAt(pos + 1);
+if (c === '\n' || c === '\r') ln++;
+if (c === '*' && cn === '/') { ...
+```
