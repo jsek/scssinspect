@@ -9,7 +9,7 @@ astToCSS = (options) ->
             else if t in _suppressed                 then return ''
             else                                          return _unique[t](tree)
         catch e
-            return "[#{tree}err]"
+            return "[__ERROR__:#{tree}]"
 
 
     _composite = (t, i) ->

@@ -36,18 +36,16 @@ class DefaultReporter extends BaseReporter
         output = '\n' + chalk.bold("Match - #{nodes.length} istances\n")
 
         for node in nodes
-            output += "#{node.file} #{node.pos}\n"
-        #    source = @_getFormattedLocation(node) + '\n'
-        #    output += if @_diff then chalk.bold(source) else source
-        #    
+            source = @_getFormattedLocation(node) + '\n'
+            output += if @_diff then chalk.bold(source) else source
+            
         if @_diff
-            output += "\t #{node.structure}\n"
-        #    for diff in match.diffs
-        #        files = "- #{@_getFormattedLocation(nodes[0])} \n+ #{@_getFormattedLocation(nodes[i + 1])}\n"
-        #        output += "\n
-        #            #{chalk.grey(files)}
-        #            #{@_getFormattedDiff(diff)}
-        #        "
+            currentDiffIndex = 0
+            for diff in match.diffs
+                currentDiffIndex++
+                files = "- #{@_getFormattedLocation(nodes[0])} \n+ #{@_getFormattedLocation(nodes[currentDiffIndex])}\n"
+                output += '\n' + chalk.grey(files) + @_getFormattedDiff(diff)
+                
         return output
 
 

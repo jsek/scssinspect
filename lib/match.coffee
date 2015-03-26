@@ -26,8 +26,8 @@ class Match
     ###
     generateDiffs : (fileContents) ->
         base = @_getLines(fileContents, @nodes[0])
-        for node in  @nodes[1..]
-            curr = @_getLines(fileContents, @node)
+        for node in @nodes[1..]
+            curr = @_getLines(fileContents, node)
             @diffs.push diff.diffLines(base, curr)
 
     ###*

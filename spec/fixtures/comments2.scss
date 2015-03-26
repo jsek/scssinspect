@@ -1,0 +1,15 @@
+.sub-selector1, .sub-selector2 {
+    border: 2px solid red;
+    color: blue;
+    z-index: 11;
+}
+
+.sub-selector1, .sub-selector2 {
+    border: 2px solid red;
+    color: blue;
+    /*
+    blabla {
+        color; red;
+    }*/
+    z-index: 11;
+}

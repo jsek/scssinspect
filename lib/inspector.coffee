@@ -26,6 +26,8 @@ class Inspector extends EventEmitter
         for filePath in @_filePaths
             filePath = filePath.replace /\//g,'\\'
             contents = fs.readFileSync(filePath, opts)
+            if @_diff
+                @_fileContents[filePath] = contents.split('\n')
             @_parse filePath, contents
 
         @_analyze()
@@ -36,7 +38,7 @@ class Inspector extends EventEmitter
         syntaxTree = parse(css: contents, syntax: 'scss', needInfo: true)
         @_walk syntaxTree, (rule) => 
             @_insert rule
-            rule.file = filePath
+            rule.loc.source = filePath
 
 
     _analyze: ->
@@ -44,8 +46,8 @@ class Inspector extends EventEmitter
             rules = @_hash[key]
             if rules?.length > 1
                 match = new Match(rules)
-                #if @_diff
-                #    match.generateDiffs @_fileContents
+                if @_diff
+                    match.generateDiffs @_fileContents
                 @emit 'match', match
 
 
@@ -66,8 +68,11 @@ class Inspector extends EventEmitter
 
     _getHashKey: (ruleset) -> 
         structure = astToCSS({ast:ruleset,syntax:'scss'}) 
-        ruleset.pos = "(line: #{Math.round(ruleset[0].ln / 2)})" # Why divide by 2? -> \r counts for line break
-        ruleset.structure = structure
+        ruleset.pos = "(#{Math.round(ruleset[0].ln / 2)}, #{Math.round(ruleset[0].end?.ln / 2)})" # Why divide by 2? -> \r counts for line break
+        ruleset.loc =
+            start: {line: Math.round(ruleset[0].ln / 2)}
+            end  : {line: Math.round(ruleset[0].end?.ln / 2)}
+            # Why divide by 2? -> \r counts for line break
         return structure
 
 
