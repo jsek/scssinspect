@@ -5,7 +5,7 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 * [Overview](#overview)
 * [Installation](#installation)
 * [Usage](#usage)
-* [Known issues](#known issues)
+* [Known issues](#known-issues)
 
 ## Overview
 
@@ -46,6 +46,9 @@ be used in place of the defaults listed above. For example:
 ```
 
 ## Known issues
+    
+ - Parser issues
+    - throws error while parsing selector with interpolation
     
  - Required patch for `gonzales-pe`
     - gonzales.css-to-ast.js:1308
