@@ -46,13 +46,11 @@ be used in place of the defaults listed above. For example:
 ```
 
 ## Known issues
-    
- - Parser issues
-    - throws error while parsing selector with interpolation
-    
+        
  - Parser patch 1: gonzales.css-to-ast.js:1308 (adding end location for ruleset)
     
 ``` javascript
+// modified line 1308
 if (needInfo)
 {
     var _info = getInfo(startPos);
@@ -65,11 +63,40 @@ if (needInfo)
 }
 ```
 
- - Parser patch 2: gonzales.css-to-ast.js:1671 (increasing line number while parsing block comments)
+ - Parser patch 2: gonzales.css-to-ast.js (increasing line number while parsing block comments)
     
 ``` javascript
-c = css.charAt(pos);
-cn = css.charAt(pos + 1);
-if (c === '\n' || c === '\r') ln++;
-if (c === '*' && cn === '/') { ...
+// modified after line 1671
+var start = pos, c, cn;
+for (pos = pos + 2; pos &lt; css.length; pos++) {
+    c = css.charAt(pos);
+    cn = css.charAt(pos + 1);
+    if (c === '\n' || c === '\r') ln++;
+    if (c === '*' && cn === '/') { ...
+```
+
+ - Parser patch 3: gonzales.css-to-ast.js (fixing interpolation after minus sign)
+    
+``` javascript
+// modified line 1983
+if (!wasIdent && tokens[start].type !== TokenType.Asterisk && l === 0) return 0;
+// quickest version, 'l' means there was interpolation for identifier
+```
+
+ - Parser patch 4: gonzales.css-to-ast.js (fixing direct interpolation in selector)
+    
+``` javascript
+// modified line 2263 
+if (l = this.checkVariable(i) || this.checkIdent(i) || this.checkInterpolatedVariable(i)) i += l;
+
+// modified line 2271
+x.push(  this.checkVariable(pos) ? this.getVariable() 
+       : this.checkInterpolatedVariable(pos) ? this.getInterpolatedVariable() 
+       : this.getIdent());
+
+// added in line 2331 
+this.checkInterpolatedVariable(i) ||
+
+// added in line 2343
+else if (this.checkInterpolatedVariable(pos)) return this.getInterpolatedVariable();
 ```
