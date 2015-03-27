@@ -5,17 +5,21 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 * [Overview](#overview)
 * [Installation](#installation)
 * [Usage](#usage)
-* [Known issues](#known-issues)
+* [Required parser patches](#required-parser-patches)
 
 ## Overview
 
 One example means more than thousand words:
 
-![screenshot](images/screenshot_0.0.1.png)
+![screenshot](images/screenshot_0.0.2.png)
 
 ## Installation
 
-![screenshot](images/installation_0.0.1.png)
+Global installation (recommended):
+
+```
+npm i -g scssinspect
+```
 
 ## Usage
 
@@ -45,12 +49,12 @@ be used in place of the defaults listed above. For example:
 }
 ```
 
-## Known issues
+## Required parser patches
         
- - Parser patch 1: gonzales.css-to-ast.js:1308 (adding end location for ruleset)
+ - Parser patch 1: adding end location for ruleset
     
 ``` javascript
-// modified line 1308
+// gonzales.css-to-ast.js: modified line 1308
 if (needInfo)
 {
     var _info = getInfo(startPos);
@@ -63,10 +67,10 @@ if (needInfo)
 }
 ```
 
- - Parser patch 2: gonzales.css-to-ast.js (increasing line number while parsing block comments)
+ - Parser patch 2: increasing line number while parsing block comments
     
 ``` javascript
-// modified after line 1671
+// gonzales.css-to-ast.js: modified after line 1671
 var start = pos, c, cn;
 for (pos = pos + 2; pos &lt; css.length; pos++) {
     c = css.charAt(pos);
@@ -75,12 +79,14 @@ for (pos = pos + 2; pos &lt; css.length; pos++) {
     if (c === '*' && cn === '/') { ...
 ```
 
- - Parser patch 3: gonzales.css-to-ast.js (fixing interpolation after minus sign)
+ - Parser patch 3: fixing interpolation after minus sign
     
 ``` javascript
+//  gonzales.css-to-ast.js
+
 // modified line 1983
 if (!wasIdent && tokens[start].type !== TokenType.Asterisk && l === 0) return 0;
-// quickest version, 'l' means there was interpolation for identifier
+// the quickest version, 'l' means there was interpolation for identifier
 ```
 
  - Parser patch 4: gonzales.css-to-ast.js (fixing direct interpolation in selector)
