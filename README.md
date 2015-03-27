@@ -11,7 +11,7 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 
 One example means more than thousand words:
 
-![screenshot](images/screenshot_0.0.2.png)
+![screenshot](images/screenshot_0.1.0.png)
 
 ## Installation
 
