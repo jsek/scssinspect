@@ -1,0 +1,14 @@
+.a {
+    width: calc(100% - #{$buttonWithSpacing});
+}
+.b {
+    width: calc(100% - #{(2 * $buttonWithSpacing)});
+}
+
+
+.r {
+    left: calc(50% + #{$btn-width / 2});
+}
+.l {
+    left: calc(50% - #{$btn-width * 3 / 2});
+}

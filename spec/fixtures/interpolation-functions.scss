@@ -1,0 +1,20 @@
+@import 'compass';
+.a {
+        &, p, li, #{headings()} {
+	        color: black;
+	        font-size: $common-fontSize;
+            line-height: 1.4em;
+        }
+}
+
+
+$fontSizes: 4, 3, 2, 1, 0, 0;
+
+@for $i from 1 through  6 {
+    .box#{$i} {
+        font-size: #{(12 + nth($fontSizes,$i)) / 12}em;
+        line-height: 18pt;
+        margin-top: 16pt;
+        margin-bottom: 8pt;
+    }
+}

@@ -1,0 +1,14 @@
+@import 'compass';
+
+.a {
+    @include transform(rotate(-90deg));
+    @include gradient-vertical($start-color: $btn-color, $end-color: darken($btn-color, 12%));
+}
+.b {
+    @include box-shadow(1px 1px 1px rgba(0,0,0,.2));
+    @include background-image(linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 40%));
+}
+.url {
+    background: url(if($use-asset-helper, image-path('#{$name}.png')); 
+    @include border-top-radius(($panel-border-radius - 1));  
+}

@@ -1,22 +1,13 @@
 @mixin placeholder ($attribute, $value) {
-	::-webkit-input-placeholder { #{$attribute}: $value; } // WebKit browsers
-}
-
-
-@mixin size($width, $height) {
-    width: $width;
-    height: $height;
+	::-webkit-input-placeholder { 
+        #{$attribute}: $value; 
+    } // WebKit browsers
 }
 
 @mixin square($size) {
     @include size($size, $size);
 }
 
-@mixin d($name) {
-    & ._#{$name} {
-        @content;
-    }
-}
+@mixin d($name) { & ._#{$name} { @content; } }
 
-
-@mixin square($size) { @include size($size, $size); }
+@mixin m($name) { & .-#{$name}  { @content; } }
