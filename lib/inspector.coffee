@@ -1,6 +1,6 @@
 util         = require('util')
 EventEmitter = require('events').EventEmitter
-parse        = require('./parser/gonzales-pe').cssToAST
+parse        = require('./parser/gonzales').cssToAST
 fs           = require('fs')
 
 Match        = require('./match')
