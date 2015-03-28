@@ -5,6 +5,7 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 * [Overview](#overview)
 * [Installation](#installation)
 * [Usage](#usage)
+* [Known issues](#known-issues)
 * [Required parser patches](#required-parser-patches)
 
 ## Overview
@@ -49,6 +50,10 @@ be used in place of the defaults listed above. For example:
 }
 ```
 
+## Known issues
+        
+ - Diff works on files where line break is always \r\n
+
 ## Required parser patches
         
  - Parser patch 1: adding end location for ruleset
@@ -82,16 +87,15 @@ for (pos = pos + 2; pos &lt; css.length; pos++) {
  - Parser patch 3: fixing interpolation after minus sign
     
 ``` javascript
-//  gonzales.css-to-ast.js
-
-// modified line 1983
+// gonzales.css-to-ast.js: modified line 1983
 if (!wasIdent && tokens[start].type !== TokenType.Asterisk && l === 0) return 0;
 // the quickest version, 'l' means there was interpolation for identifier
 ```
 
- - Parser patch 4: gonzales.css-to-ast.js (fixing direct interpolation in selector)
+ - Parser patch 4: fixing direct interpolation in selector
     
 ``` javascript
+/* gonzales.css-to-ast.js */
 // modified line 2263 
 if (l = this.checkVariable(i) || this.checkIdent(i) || this.checkInterpolatedVariable(i)) i += l;
 

@@ -23,7 +23,6 @@
     "chalk": "*",
     "commander": "*",
     "diff": "1.0.8",
-    "gonzales-pe": "2.0.2",
     "node-filepaths": "0.0.3",
     "strip-indent": "^1.0.0",
     "strip-json-comments": "1.0.2"
