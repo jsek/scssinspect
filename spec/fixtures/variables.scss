@@ -1,33 +1,4 @@
 
-
 $bootstrap-sass-asset-helper: (twbs-font-path("") != unquote('twbs-font-path("")')) !default;
 
-$font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
-$font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
-//** Default `.form-control` height
-$input-height-base:              ($line-height-computed + ($padding-base-vertical * 2) + 2) !default;
-//** Large `.form-control` height
-$input-height-large:             (ceil($font-size-large * $line-height-large) + ($padding-large-vertical * 2) + 2) !default;
-//** Small `.form-control` height
-$input-height-small:             (floor($font-size-small * $line-height-small) + ($padding-small-vertical * 2) + 2) !default;
-
-
-
-@if true {
-	$break-pt1: (columns(19) + $gutter - 1);
-	$break-pt2: (columns(14) - 1);
-	$break-pt3: (columns(11) - 1);
-	$break-pt4: (columns(7) - 1);
-	
-	$tablet-width		: $break-pt1 + 1 !global;
-	$tablet-small-width	: $break-pt2 + 1 !global;
-	$mobile-width		: $break-pt3 + 1 !global;
-	$mobile-small-width	: $break-pt4 + 1 !global;
-
-	$tablet:		'only screen and (max-width: #{$break-pt1})' !global;
-	$tablet-small:	'only screen and (max-width: #{$break-pt2})' !global;
-	$mobile:		'only screen and (max-width: #{$break-pt3})' !global;
-	$mobile-small:  'only screen and (max-width: #{$break-pt4})' !global;
-	
-	$first-break:	$tablet !global;
-}
+$tablet-width		: $break-pt1 + 1 !global;

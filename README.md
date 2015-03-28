@@ -53,6 +53,12 @@ be used in place of the defaults listed above. For example:
 ## Known issues
         
  - Diff works on files where line break is always \r\n
+ - Parser issues:
+    - expressions inside interpolation when there is `-` sign used
+    - functions calls inside calc() or another function are not supported
+    - @media queries causes exceptions
+    - imports require single quotes `'`
+    - !global is not supported
 
 ## Required parser patches
 
