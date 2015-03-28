@@ -12,7 +12,7 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 
 One example means more than thousand words:
 
-![screenshot](images/screenshot_0.1.0.png)
+![screenshot](images/screenshot_0.1.4.png)
 
 ## Installation
 
@@ -55,6 +55,8 @@ be used in place of the defaults listed above. For example:
  - Diff works on files where line break is always \r\n
 
 ## Required parser patches
+
+ Scss parser (gonzales@2.0.2) is copied into /parser directory with following patches applied:
         
  - Parser patch 1: adding end location for ruleset
     
