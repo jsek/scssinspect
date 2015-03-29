@@ -1,4 +1,3 @@
-fs          = require('fs')
 chalk       = require('chalk')
 fixtures    = require('./fixtures')
 

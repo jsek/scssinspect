@@ -1,6 +1,4 @@
 expect          = require('expect.js')
-util            = require('util')
-chalk           = require('chalk')
 
 fixtures        = require('../fixtures')
 helpers         = require('../helpers')
