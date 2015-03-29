@@ -19,7 +19,6 @@
     "url": "https://github.com/jsek/scssinspect.git"
   },
   "dependencies": {
-    "acorn": "0.10.0",
     "chalk": "*",
     "commander": "*",
     "diff": "1.0.8",

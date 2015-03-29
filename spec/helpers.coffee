@@ -1,5 +1,4 @@
 fs          = require('fs')
-parse       = require('acorn/acorn_loose').parse_dammit
 chalk       = require('chalk')
 fixtures    = require('./fixtures')
 
@@ -25,22 +24,6 @@ class Helper
     restoreOutput: ->
         chalk.enabled = enabled
         process.stdout.write = write
-
-
-    parse: (filePath) ->
-        contents = undefined
-        ast = undefined
-        if parseCache[filePath]
-            return parseCache[filePath]
-        contents = fs.readFileSync(filePath, encoding: 'utf8')
-        # Skip the parent 'Program' node
-        ast = parse(contents,
-            ecmaVersion: 6
-            allowReturnOutsideFunction: true
-            locations: true
-            sourceFile: filePath).body
-        parseCache[filePath] = ast
-        return ast
 
 
     safeTestOutput: (Inspector, Reporter, filename, options, testFn) ->
