@@ -33,7 +33,7 @@ class DefaultReporter extends BaseReporter
     ###
     _getOutput: (match) ->
         nodes = match.nodes
-        output = '\n' + chalk.bold("Match - #{nodes.length} istances\n")
+        output = '\n' + chalk.bold("Match - #{nodes.length} instances\n")
 
         for node in nodes
             source = @_getFormattedLocation(node) + '\n'
@@ -43,7 +43,11 @@ class DefaultReporter extends BaseReporter
             currentDiffIndex = 0
             for diff in match.diffs
                 currentDiffIndex++
-                files = "- #{@_getFormattedLocation(nodes[0])} \n+ #{@_getFormattedLocation(nodes[currentDiffIndex])}\n"
+                files = """
+                - #{@_getFormattedLocation(nodes[0])}
+                + #{@_getFormattedLocation(nodes[currentDiffIndex])}
+                
+                """
                 output += '\n' + chalk.grey(files) + @_getFormattedDiff(diff)
                 
         return output

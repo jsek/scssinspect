@@ -67,12 +67,12 @@ class Inspector extends EventEmitter
 
 
     _getHashKey: (ruleset) -> 
-        structure = astToCSS({ast:ruleset,syntax:'scss'}) 
-        ruleset.pos = "(#{Math.round(ruleset[0].ln / 2)}, #{Math.round(ruleset[0].end?.ln / 2)})" # Why divide by 2? -> \r counts for line break
+        structure = astToCSS({ ast:ruleset, syntax:'scss' }) 
+        ruleset.type = 'ruleset'
+        ruleset.pos = "(#{ruleset[0].ln}, #{ruleset[0].end?.ln})"
         ruleset.loc =
-            start: {line: Math.round(ruleset[0].ln / 2)}
-            end  : {line: Math.round(ruleset[0].end?.ln / 2)}
-            # Why divide by 2? -> \r counts for line break
+            start: {line: ruleset[0].ln}
+            end  : {line: ruleset[0].end?.ln}
         return structure
 
 

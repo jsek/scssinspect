@@ -67,11 +67,11 @@ class BaseReporter
             
             for line in lines
                 if chunk.added
-                    output += chalk.green("+  #{line}\n")
+                    output += chalk.green("+   #{line}\n")
                 else if chunk.removed
-                    output += chalk.red("-  #{line}\n")
+                    output += chalk.red("-   #{line}\n")
                 else
-                    output += "   #{line}\n"
+                    output += "    #{line}\n"
                     
         return output
 

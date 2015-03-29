@@ -1,5 +1,5 @@
 //.intersectionA {
-.sub-selector1, .sub-selector2 {
+.a, .b {
     border: 2px solid red;
     color: blue;
     z-index: 11;
@@ -7,9 +7,8 @@
 //}
 
 //.intersectionB {
-.sub-selector1, .sub-selector2 {
+.b, .a {
     border: 2px solid red;
     color: blue;
-    z-index: 11;
-}
+    z-index: 11; }
 //}

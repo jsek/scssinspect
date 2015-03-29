@@ -1,7 +1,12 @@
 path    = require('path')
 
 absolutePaths   = {}
-fixtures        = [ 'intersection' ]
+fixtures        = [ 
+    'indentation'
+    'intersection'
+    'intersection-diff'
+    'no-match'
+]
 
 for fixture in fixtures
     absolutePaths[fixture] = path.resolve(__dirname, fixture + '.scss')

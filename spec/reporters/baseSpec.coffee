@@ -3,16 +3,15 @@ util         = require('util')
 chalk        = require('chalk')
 fixtures     = require('../fixtures')
 helpers      = require('../helpers')
-BaseReporter = require('../../lib/reporters/base.js')
-Inspector    = require('../../lib/inspector.js')
+BaseReporter = require('../../lib/reporters/base')
+Inspector    = require('../../lib/inspector')
 
 # A simple TestReporter for testing the BaseReporter
 class TestReporter extends BaseReporter
-    contstructor: (inspector) ->
+    constructor: (inspector) ->
         super inspector
         @_registerSummary()
-
-    _getOutput: ->
+    _getOutput: (match) ->
 
 describe 'BaseReporter', ->
 
@@ -54,22 +53,13 @@ describe 'BaseReporter', ->
             helpers.captureOutput()
             
         it 'can be printed on inspector end', ->
-            inspector = new Inspector([ fixtures.intersection ])
-            reporter = new TestReporter(inspector)
-            inspector.run()
-            helpers.restoreOutput()
-            expect(helpers.getOutput()).to.not.be null
+            helpers.safeTestOutput Inspector, TestReporter, 'intersection', (o) -> 
+                expect(o).to.not.be null
             
-        xit 'prints the correct results if no matches were found', ->
-            inspector = new Inspector([ fixtures.intersection ], threshold: 4)
-            reporter = new TestReporter(inspector)
-            inspector.run()
-            helpers.restoreOutput()
-            expect(helpers.getOutput()).to.be '\n No matches found across 1 files\n'
+        it 'prints the correct results if no matches were found', ->
+            helpers.safeTestOutput Inspector, TestReporter, 'no-match', (o) -> 
+                expect(o).to.be '\n No matches found across 1 files\n'
             
-        xit 'prints the correct results if matches were found', ->
-            inspector = new Inspector([ fixtures.intersection ], threshold: 3)
-            reporter = new TestReporter(inspector)
-            inspector.run()
-            helpers.restoreOutput()
-            expect(helpers.getOutput()).to.be '\n 1 matches found across 1 files\n'
+        it 'prints the correct results if matches were found', ->
+            helpers.safeTestOutput Inspector, TestReporter, 'intersection', (o) -> 
+                expect(o).to.be '\n 1 matches found across 1 files\n'

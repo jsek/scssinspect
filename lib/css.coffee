@@ -78,7 +78,7 @@ astToCSS = (options) ->
         'braces'        : (t) -> t[index(1)] + _composite(t, index(3)) + t[index(2)]
         'class'         : (t) -> '.' + _t(t[index(1)])
         'declaration'   : (t) -> (_t(token) for token in t[index(1)..]).join ''
-        'selector'      : (t) -> (_t(token) for token in t[index(1)..]).filter((s) -> s.length > 0).join(', ') + ' '
+        'selector'      : (t) -> (_t(token) for token in t[index(1)..]).filter((s) -> s.length > 0).sort().join(', ') + ' '
         'value'         : (t) -> (_t(token) for token in t[index(1)..]).filter((s) -> s.length > 0).join(' ')
         'default'       : (t) -> '!' + _composite(t) + 'default'
         'escapedString' : (t) -> '~' + t[index(1)]

@@ -250,7 +250,11 @@ var getTokens = (function() {
             }
             else if (c in Punctuation) {
                 pushToken(Punctuation[c], c);
-                if (c === '\n' || c === '\r') ln++;
+                if (c === '\r') {
+                    if (cn === '\n') pos++;
+                    ln++;
+                }
+                if (c === '\n') ln++;
                 if (c === ')') urlMode = false;
                 if (c === '{') blockMode++;
                 if (c === '}') blockMode--;
@@ -1673,7 +1677,11 @@ syntaxes.css = {
         for (pos = pos + 2; pos < css.length; pos++) {
             c = css.charAt(pos);
             cn = css.charAt(pos + 1);
-            if (c === '\n' || c === '\r') ln++;
+            if (c === '\r') {
+                if (cn === '\n') pos++;
+                ln++;
+            }
+            if (c === '\n') ln++;
             if (c === '*' && cn === '/') {
                 pos++;
                 break;
