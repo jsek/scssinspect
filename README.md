@@ -7,8 +7,6 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 
 [![dependencies](https://david-dm.org/jsek/scssinspect.png)](https://david-dm.org/jsek/scssinspect)
 
-[![issues](http://issuestats.com/github/jsek/scssinspect/badge/issue.png)](http://issuestats.com/github/jsek/scssinspect/badge/issue)
-
 * [Overview](#overview)
 * [Installation](#installation)
 * [Usage](#usage)
