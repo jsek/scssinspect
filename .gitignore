@@ -20,3 +20,5 @@ node_modules
 
 .sass-cache
 _README
+
+_test.*
