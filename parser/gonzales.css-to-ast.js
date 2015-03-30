@@ -2466,6 +2466,40 @@ syntaxes.css = {
         }
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
+    scss.getUri = function() {
+        var startPos = pos,
+            uriExcluding = {},
+            uri,
+            l,
+            raw;
+        pos += 2;
+        uriExcluding[TokenType.Tab] = 1;
+        uriExcluding[TokenType.Newline] = 1;
+        uriExcluding[TokenType.LeftParenthesis] = 1;
+        uriExcluding[TokenType.RightParenthesis] = 1;
+        
+        if (this.checkArgument(pos)) {
+            uri = [NodeType.UriType]
+                .concat(this.getArgument());
+            pos++;
+        } else if (this.checkUri1(pos)) {
+            uri = [NodeType.UriType]
+                .concat(this.getSC())
+                .concat([this.getString()])
+                .concat(this.getSC());
+            pos++;
+        } else {
+            uri = [NodeType.UriType].concat(this.getSC()),
+            l = checkExcluding(uriExcluding, pos),
+            raw = [NodeType.RawType, joinValues(pos, pos + l)];
+            if (needInfo) raw.unshift(getInfo(startPos));
+            uri.push(raw);
+            pos += l + 1;
+            uri = uri.concat(this.getSC());
+            pos++;
+        }
+        return needInfo ? (uri.unshift(getInfo(startPos)), uri) : uri;
+    };
     scss.checkValue = function(i) {
         var start = i,
             l;

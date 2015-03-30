@@ -1,3 +1,6 @@
 .url {
-    background: url(if($use-asset-helper, image-path('#{$name}.png')); 
+    background: url('#{$name}.png'); 
+}
+.url {
+    background: url(if($use-asset-helper, image-path('#{$name}.png'))); 
 }

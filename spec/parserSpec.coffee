@@ -62,7 +62,7 @@ describe 'Parser', ->
             expect(o).to.be '' 
 
             
-    xit 'should parse expressions inside url() without exception', ->
+    it 'should parse expressions inside url() without exception', ->
         helpers.safeTestOutput Inspector, DefaultReporter, 'expression-in-url', {diff: false, ignoreSummary: true}, (o) ->
             expect(o).to.be '' 
 

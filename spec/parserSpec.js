@@ -83,7 +83,7 @@ describe('Parser', function() {
       return expect(o).to.be('');
     });
   });
-  xit('should parse expressions inside url() without exception', function() {
+  it('should parse expressions inside url() without exception', function() {
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'expression-in-url', {
       diff: false,
       ignoreSummary: true
