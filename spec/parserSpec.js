@@ -45,10 +45,30 @@ describe('Parser', function() {
       return expect(o).to.be('');
     });
   });
-  return it('should parse interpolation in calc without exception', function() {
+  it('should parse interpolation in calc without exception', function() {
     var file;
     file = fixtures['interpolation-calc'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'interpolation-calc', {
+      diff: false,
+      ignoreSummary: true
+    }, function(o) {
+      return expect(o).to.be('');
+    });
+  });
+  it('should parse interpolation in calc without exception', function() {
+    var file;
+    file = fixtures['interpolation-functions'];
+    return helpers.safeTestOutput(Inspector, DefaultReporter, 'interpolation-functions', {
+      diff: false,
+      ignoreSummary: true
+    }, function(o) {
+      return expect(o).to.be('');
+    });
+  });
+  return it('should parse interpolation in calc without exception', function() {
+    var file;
+    file = fixtures['interpolation-functions'];
+    return helpers.safeTestOutput(Inspector, DefaultReporter, 'interpolation-functions', {
       diff: false,
       ignoreSummary: true
     }, function(o) {

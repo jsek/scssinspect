@@ -42,3 +42,9 @@ describe 'Parser', ->
         file = fixtures['interpolation-calc']
         helpers.safeTestOutput Inspector, DefaultReporter, 'interpolation-calc', {diff: false, ignoreSummary: true}, (o) ->
             expect(o).to.be '' 
+
+
+    it 'should parse interpolation in calc without exception', ->
+        file = fixtures['interpolation-functions']
+        helpers.safeTestOutput Inspector, DefaultReporter, 'interpolation-functions', {diff: false, ignoreSummary: true}, (o) ->
+            expect(o).to.be '' 
