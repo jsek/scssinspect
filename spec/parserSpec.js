@@ -105,7 +105,7 @@ describe('Parser', function() {
       return expect(o).to.be('');
     });
   });
-  return xit('should parse variables assignment without exception', function() {
+  return it('should parse variables assignment without exception', function() {
     var file;
     file = fixtures['media-queries'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'variables', {

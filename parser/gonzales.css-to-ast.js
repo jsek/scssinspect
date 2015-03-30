@@ -66,6 +66,7 @@ var TokenType = {
     Semicolon: 'Semicolon',
     LessThanSign: 'LessThanSign',
     EqualsSign: 'EqualsSign',
+    NotEqualsSign: 'NotEqualsSign',
     GreaterThanSign: 'GreaterThanSign',
     QuestionMark: 'QuestionMark',
     CommercialAt: 'CommercialAt',
@@ -111,6 +112,7 @@ var NodeType = {
     FunctionType: 'function',
     FunctionBodyType: 'functionBody',
     FunctionExpressionType: 'functionExpression',
+    GlobalType: 'global',
     IdentType: 'ident',
     ImportantType: 'important',
     IncludeType :'include',
@@ -174,6 +176,7 @@ var getTokens = (function() {
         ';': TokenType.Semicolon,
         '<': TokenType.LessThanSign,
         '=': TokenType.EqualsSign,
+        '!=': TokenType.NotEqualsSign,
         '>': TokenType.GreaterThanSign,
         '?': TokenType.QuestionMark,
         '@': TokenType.CommercialAt,
@@ -248,6 +251,9 @@ var getTokens = (function() {
             else if (c === ' ') {
                 parseSpaces(css)
             }
+            else if ((c+cn) in Punctuation) {
+                pushToken(Punctuation[c+cn], c+cn);
+            }
             else if (c in Punctuation) {
                 pushToken(Punctuation[c], c);
                 if (c === '\r') {
@@ -298,6 +304,7 @@ var rules = {
     'filterv': function() { if (s.checkFilterv(pos)) return s.getFilterv() },
     'functionExpression': function() { if (s.checkFunctionExpression(pos)) return s.getFunctionExpression() },
     'function': function() { if (s.checkFunction(pos)) return s.getFunction() },
+    'global': function () { if (s.checkGlobal(pos)) return s.getGlobal() },
     'ident': function() { if (s.checkIdent(pos)) return s.getIdent() },
     'important': function() { if (s.checkImportant(pos)) return s.getImportant() },
     'include': function () { if (s.checkInclude(pos)) return s.getInclude() },
@@ -1175,6 +1182,7 @@ syntaxes.css = {
             case TokenType.Comma:
             case TokenType.Colon:
             case TokenType.EqualsSign:
+            case TokenType.NotEqualsSign:
                 return 1;
         }
         return 0;
@@ -1970,6 +1978,24 @@ syntaxes.css = {
         x = x.concat(sc);
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
+    scss.checkGlobal = function(i) {
+        var start = i,
+            l;
+        if (i >= tokensLength ||
+            tokens[i++].type !== TokenType.ExclamationMark) return 0;
+        if (l = this.checkSC(i)) i += l;
+        return tokens[i].value === 'global' ? i - start + 1 : 0;
+    };
+    scss.getGlobal = function() {
+        var startPos = pos,
+            x = [NodeType.GlobalType],
+            sc;
+        pos++;
+        sc = this.getSC();
+        pos++;
+        x = x.concat(sc);
+        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+    };
     scss.getFunctionBody = function() {
         var startPos = pos,
             x = [NodeType.FunctionBodyType],
@@ -2261,6 +2287,7 @@ syntaxes.css = {
             case TokenType.Comma:
             case TokenType.Colon:
             case TokenType.EqualsSign:
+            case TokenType.NotEqualsSign:
             case TokenType.LessThanSign:
             case TokenType.GreaterThanSign:
             case TokenType.Asterisk:
@@ -2458,7 +2485,8 @@ syntaxes.css = {
             this.checkAtkeyword(i) ||
             this.checkOperator(i) ||
             this.checkImportant(i) ||
-            this.checkDefault(i);
+            this.checkDefault(i) ||
+            this.checkGlobal(i);
     };
     scss.getValue = function() {
         var startPos = pos,
@@ -2485,6 +2513,7 @@ syntaxes.css = {
         else if (this.checkOperator(pos)) return this.getOperator();
         else if (this.checkImportant(pos)) return this.getImportant();
         else if (this.checkDefault(pos)) return this.getDefault();
+        else if (this.checkGlobal(pos)) return this.getGlobal();
     };
     scss.checkVariable = function(i) {  
         var l;

@@ -74,7 +74,7 @@ describe 'Parser', ->
             expect(o).to.be '' 
 
             
-    xit 'should parse variables assignment without exception', ->
+    it 'should parse variables assignment without exception', ->
         file = fixtures['media-queries']
         helpers.safeTestOutput Inspector, DefaultReporter, 'variables', {diff: false, ignoreSummary: true}, (o) ->
             expect(o).to.be '' 
