@@ -13,6 +13,7 @@ class Inspector extends EventEmitter
         @_threshold     = opts.threshold or 15
         @_ignoreValues  = opts['ignore-values']
         @_diff          = opts.diff
+        @_skip          = opts.skip
         @_hash          = Object.create(null)
         @numFiles       = @_filePaths.length
         if @_diff
@@ -28,7 +29,15 @@ class Inspector extends EventEmitter
             contents = fs.readFileSync(filePath, opts)
             if @_diff
                 @_fileContents[filePath] = contents.split('\n')
-            @_parse filePath, contents
+            try
+                @_parse filePath, contents
+            catch err
+                if @_skip
+                    console.log "WARNING: Cannot parse #{filePath}\n > #{err.message}"
+                    @numFiles--
+                else 
+                    throw err
+                    
 
         @_analyze()
         @emit 'end'

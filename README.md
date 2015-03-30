@@ -44,6 +44,7 @@ Options:
   -h, --help                         output usage information
   -V, --version                      output the version number
   -c, --config                       path to config file (default: .scssinspectrc)
+  -s, --skip                         skip files with parsing errors
   -D, --no-diff                      disable 2-way diffs
   -C, --no-color                     disable colors
   --ignore <pattern>                 ignore paths matching a regex

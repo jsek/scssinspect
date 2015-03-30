@@ -19,6 +19,7 @@ program
 //  .option('-t, --threshold <number>'    , 'number of nodes (default: 15)', parseInt)
 //  .option('-i, --ignore-values'         , 'don\'t match exact numeric/color values')
   .option('-c, --config'                , 'path to config file (default: .scssinspectrc)')
+  .option('-s, --skip'                  , 'skip files with parsing errors')
 //  .option('-r, --reporter [default|json]', 'specify the reporter to use (you can apply your own, just use path to *.js file)')
 //  .option('-s, --suppress <number>'     , 'length to suppress diffs (default: 100, off: 0)', parseInt)
   .option('-D, --no-diff'               , 'disable 2-way diffs')
@@ -82,6 +83,7 @@ if (!paths.length) {
 var inspector = new Inspector(paths, {
     threshold       : program.threshold,
     diff            : program.diff,
+    skip            : program.skip,
     'ignore-values' : program['ignore-values']
 });
 
