@@ -33,15 +33,13 @@ class Inspector extends EventEmitter
                 @_parse filePath, contents
             catch err
                 if @_skip
+                    @numFiles--
                     @emit 'warning', 
                         message: 'Cannot parse file'
                         path: filePath
                         error: err
-                        
-                    @numFiles--
                 else
                     throw err
-                    
 
         @_analyze()
         @emit 'end'
