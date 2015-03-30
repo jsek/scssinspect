@@ -52,5 +52,17 @@ class DefaultReporter extends BaseReporter
                 
         return output
 
+    ###*
+    # Returns the formatted warning message.
+    #
+    # @private
+    #
+    # @param   {Match}  match The inspector match to output
+    # @returns {string} The formatted output
+    ###
+    _getWarning: (warn) ->
+        return chalk.yellow "#{chalk.bold 'WARNING'}: #{warn.message} #{chalk.cyan warn.path}\n > #{warn.error.message}\n"
+
+
 
 module.exports = DefaultReporter

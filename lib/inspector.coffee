@@ -33,9 +33,13 @@ class Inspector extends EventEmitter
                 @_parse filePath, contents
             catch err
                 if @_skip
-                    console.log "WARNING: Cannot parse #{filePath}\n > #{err.message}"
+                    @emit 'warning', 
+                        message: 'Cannot parse file'
+                        path: filePath
+                        error: err
+                        
                     @numFiles--
-                else 
+                else
                     throw err
                     
 

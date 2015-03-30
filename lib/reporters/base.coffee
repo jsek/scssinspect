@@ -3,6 +3,12 @@ path    = require('path')
 chalk   = require('chalk')
 
 ###*
+# Helpers
+###
+pluralize = (count, text) -> unless count is 1 then text + 's' else text
+pluralizeE = (count, text) -> unless count is 1 then text + 'es' else text
+
+###*
 # A base reporter from which all others inherit. Registers a listener on the
 # passed inspector instance for tracking the number of matches found.
 ###
@@ -16,6 +22,7 @@ class BaseReporter
     ###
     constructor: (@_inspector, opts = {}) ->
         @_found = 0
+        @_skipped = 0
         @_suppress = if opts.suppress == 0 then 0 else opts.suppress or 1000
         @_registerListener()
 
@@ -30,6 +37,10 @@ class BaseReporter
         @_inspector.on 'match', (match) =>
             @_found++
             process.stdout.write @_getOutput(match)
+            
+        @_inspector.on 'warning', (warn) =>
+            @_skipped++
+            process.stdout.write @_getWarning(warn)
 
     ###*
     # Registers a listener that prints a final summary outlining the number of
@@ -37,11 +48,17 @@ class BaseReporter
     ###
     _registerSummary: ->
         @_inspector.on 'end', =>
+            found = ''
             numFiles = @_inspector.numFiles
+            checked = "#{numFiles} #{pluralize(numFiles,'file')}"
+            skipped = if @_skipped then " (#{@_skipped} #{pluralize(@_skipped,'file')} skipped)" else ''
+            
             unless @_found
-                process.stdout.write chalk.black.bgGreen("\n No matches found across #{numFiles} files\n")
+                found = chalk.black.bgGreen "\n No matches found across #{checked}"
             else
-                process.stdout.write chalk.bgRed("\n #{@_found} matches found across #{numFiles} files\n")
+                found = chalk.white.bgRed "\n #{@_found} #{pluralizeE(@_found,'match')} found across #{checked}"
+            
+            process.stdout.write found + skipped + '\n'
 
     ###*
     # Accepts a diff object and returns a corresponding formatted diff string.
