@@ -23,7 +23,7 @@ describe('DefaultReporter', function() {
   it('prints the summary on end', function() {
     helpers.captureOutput();
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'no-match', function(o) {
-      return expect(o).to.be('\n No matches found across 1 files\n');
+      return expect(o).to.be('\n No matches found across 1 file\n');
     });
   });
   return describe('given a match', function() {

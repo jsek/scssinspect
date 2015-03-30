@@ -81,12 +81,12 @@ describe('BaseReporter', function() {
     });
     it('prints the correct results if no matches were found', function() {
       return helpers.safeTestOutput(Inspector, TestReporter, 'no-match', function(o) {
-        return expect(o).to.be('\n No matches found across 1 files\n');
+        return expect(o).to.be('\n No matches found across 1 file\n');
       });
     });
     return it('prints the correct results if matches were found', function() {
       return helpers.safeTestOutput(Inspector, TestReporter, 'intersection', function(o) {
-        return expect(o).to.be('\n 1 matches found across 1 files\n');
+        return expect(o).to.be('\n 1 match found across 1 file\n');
       });
     });
   });

@@ -57,8 +57,8 @@ describe 'BaseReporter', ->
             
         it 'prints the correct results if no matches were found', ->
             helpers.safeTestOutput Inspector, TestReporter, 'no-match', (o) -> 
-                expect(o).to.be '\n No matches found across 1 files\n'
+                expect(o).to.be '\n No matches found across 1 file\n'
             
         it 'prints the correct results if matches were found', ->
             helpers.safeTestOutput Inspector, TestReporter, 'intersection', (o) -> 
-                expect(o).to.be '\n 1 matches found across 1 files\n'
+                expect(o).to.be '\n 1 match found across 1 file\n'

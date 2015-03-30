@@ -17,7 +17,7 @@ describe 'DefaultReporter', ->
     it 'prints the summary on end', ->
         helpers.captureOutput()
         helpers.safeTestOutput Inspector, DefaultReporter, 'no-match', (o) ->
-            expect(o).to.be '\n No matches found across 1 files\n'
+            expect(o).to.be '\n No matches found across 1 file\n'
 
     describe 'given a match', ->
     
