@@ -59,9 +59,9 @@ be used in place of the defaults listed above. For example:
 
 ## Known issues
         
- - Diff works on files where line break is always \r\n
  - Parser issues:
     - @media queries cause infinite loop
+    - inline if() statements are not supported
 
 ## Required parser patches
 
