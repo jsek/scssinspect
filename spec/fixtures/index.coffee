@@ -4,6 +4,7 @@ absolutePaths   = {}
 fixtures        = [ 
     'comments1'
     'comments2'
+    'expression-in-url'
     'import-strings'
     'indentation'
     'interpolation'

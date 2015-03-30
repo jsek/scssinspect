@@ -1761,6 +1761,7 @@ syntaxes.css = {
     };
     scss.checkArgument = function(i) {
         return this.checkDeclaration(i) ||
+            this.checkFunction(i) ||
             this.checkVariablesList(i) ||
             this.checkVariable(i) ||
             this.checkSC(i) ||
@@ -1772,10 +1773,12 @@ syntaxes.css = {
             this.checkNumber(i) ||
             this.checkUri(i) ||
             this.checkIdent(i) ||
-            this.checkVhash(i);
+            this.checkVhash(i) ||
+            this.checkValue(i);
     };
     scss.getArgument = function() {
         if (this.checkDeclaration(pos)) return this.getDeclaration();
+        else if (this.checkFunction(pos)) return this.getFunction();
         else if (this.checkVariablesList(pos)) return this.getVariablesList();
         else if (this.checkVariable(pos)) return this.getVariable();
         else if (this.checkSC(pos)) return this.getSC();
@@ -1788,6 +1791,7 @@ syntaxes.css = {
         else if (this.checkUri(pos)) return this.getUri();
         else if (this.checkIdent(pos)) return this.getIdent();
         else if (this.checkVhash(pos)) return this.getVhash();
+        else if (this.checkValue(pos)) return this.getValue();
     };
     scss.checkBlockdecl1 = function(i) {
         var start = i,

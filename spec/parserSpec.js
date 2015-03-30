@@ -55,7 +55,7 @@ describe('Parser', function() {
       return expect(o).to.be('');
     });
   });
-  it('should parse interpolation in calc without exception', function() {
+  it('should parse functions inside interpolation without exception', function() {
     var file;
     file = fixtures['interpolation-functions'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'interpolation-functions', {
@@ -65,10 +65,50 @@ describe('Parser', function() {
       return expect(o).to.be('');
     });
   });
-  return it('should parse interpolation in calc without exception', function() {
+  xit('should parse media-queries without exception', function() {
     var file;
-    file = fixtures['interpolation-functions'];
-    return helpers.safeTestOutput(Inspector, DefaultReporter, 'interpolation-functions', {
+    file = fixtures['media-queries'];
+    return helpers.safeTestOutput(Inspector, DefaultReporter, 'media-queries', {
+      diff: false,
+      ignoreSummary: true
+    }, function(o) {
+      return expect(o).to.be('');
+    });
+  });
+  xit('should parse negative values without exception', function() {
+    var file;
+    file = fixtures['negative-values'];
+    return helpers.safeTestOutput(Inspector, DefaultReporter, 'negative-values', {
+      diff: false,
+      ignoreSummary: true
+    }, function(o) {
+      return expect(o).to.be('');
+    });
+  });
+  it('should parse nested functions without exception', function() {
+    var file;
+    file = fixtures['nested-functions'];
+    return helpers.safeTestOutput(Inspector, DefaultReporter, 'nested-functions', {
+      diff: false,
+      ignoreSummary: true
+    }, function(o) {
+      return expect(o).to.be('');
+    });
+  });
+  xit('should parse expressions inside url() without exception', function() {
+    var file;
+    file = fixtures['expression-in-url'];
+    return helpers.safeTestOutput(Inspector, DefaultReporter, 'expression-in-url', {
+      diff: false,
+      ignoreSummary: true
+    }, function(o) {
+      return expect(o).to.be('');
+    });
+  });
+  return xit('should parse variables assignment without exception', function() {
+    var file;
+    file = fixtures['media-queries'];
+    return helpers.safeTestOutput(Inspector, DefaultReporter, 'variables', {
       diff: false,
       ignoreSummary: true
     }, function(o) {
