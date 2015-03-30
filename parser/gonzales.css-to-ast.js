@@ -301,7 +301,7 @@ var rules = {
     'ident': function() { if (s.checkIdent(pos)) return s.getIdent() },
     'important': function() { if (s.checkImportant(pos)) return s.getImportant() },
     'include': function () { if (s.checkInclude(pos)) return s.getInclude() },
-    'interpolatedVariable': function () { if (s.checkInterpolatedVariable(pos)) return s.getInterpolatedVariable() },
+    'interpolatedVariable': function () { if (s.checkInterpolatedExpression(pos)) return s.getInterpolatedExpression() },
     'loop': function() { if (s.checkLoop(pos)) return s.getLoop() },
     'mixin': function () { if (s.checkMixin(pos)) return s.getMixin() },
     'namespace': function() { if (s.checkNamespace(pos)) return s.getNamespace() },
@@ -1890,7 +1890,7 @@ syntaxes.css = {
         if (i >= tokensLength) return 0;
         if (tokens[i].class_l) return tokens[i].class_l;
         if (tokens[i++].type === TokenType.FullStop &&
-            (l = this.checkInterpolatedVariable(i) || this.checkIdent(i))) {
+            (l = this.checkInterpolatedExpression(i) || this.checkIdent(i))) {
             tokens[i].class_l = l + 1;
             return l + 1;
         }
@@ -1900,7 +1900,7 @@ syntaxes.css = {
         var startPos = pos,
             x = [NodeType.ClassType];
         pos++;
-        x.push(this.checkInterpolatedVariable(pos) ? this.getInterpolatedVariable() : this.getIdent());
+        x.push(this.checkInterpolatedExpression(pos) ? this.getInterpolatedExpression() : this.getIdent());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
     scss.checkCommentSL = function(i) {
@@ -1966,6 +1966,23 @@ syntaxes.css = {
         x = x.concat(sc);
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
+    scss.getFunctionBody = function() {
+        var startPos = pos,
+            x = [NodeType.FunctionBodyType],
+            body;
+        while (tokens[pos].type !== TokenType.RightParenthesis) {
+            if (this.checkInterpolatedExpression(pos)) x.push(this.getInterpolatedExpression());
+            else if (this.checkDeclaration(pos)) x.push(this.getDeclaration());
+            else if (this.checkTset(pos)) {
+                body = this.getTset();
+                if ((needInfo && typeof body[1] === 'string') || typeof body[0] === 'string') x.push(body);
+                else x = x.concat(body);
+            } else if (this.checkClass(pos)) x.push(this.getClass());
+            else throwError();
+        }
+        pos++;
+        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+    };
     scss.checkIdent = function(i) {
         var start = i,
             wasIdent,
@@ -1979,7 +1996,7 @@ syntaxes.css = {
         else return 0;
         wasIdent = tokens[i - 1].type === TokenType.Identifier;
         for (; i < tokensLength; i++) {
-            if (l = this.checkInterpolatedVariable(i)) i += l;
+            if (l = this.checkInterpolatedExpression(i)) i += l;
             if (i >= tokensLength) break;
             if (tokens[i].type !== TokenType.HyphenMinus &&
                 tokens[i].type !== TokenType.LowLine) {
@@ -2137,23 +2154,31 @@ syntaxes.css = {
         }
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
-    scss.checkInterpolatedVariable = function(i) {
+    scss.checkInterpolatedExpression = function(i) {
         var start = i,
             l;
         if (i >= tokensLength) return 0;
         if (tokens[i].type !== TokenType.NumberSign ||
-            !tokens[i + 1] || tokens[i + 1].type !== TokenType.LeftCurlyBracket ||
-            !tokens[i + 2] || tokens[i + 2].type !== TokenType.DollarSign) return 0;
-        i += 3;
-        if (l = this.checkIdent(i)) i += l;
-        else return 0;
+            !tokens[i + 1] || tokens[i + 1].type !== TokenType.LeftCurlyBracket) return 0;
+        i += 2;
+        while (tokens[i].type !== TokenType.RightCurlyBracket)
+        {
+            if (l = this.checkValue(i)) i += l;
+            else return 0;
+        }
         return tokens[i].type === TokenType.RightCurlyBracket ? i - start + 1 : 0;
     };
-    scss.getInterpolatedVariable = function() {
+    scss.getInterpolatedExpression = function() {
         var startPos = pos,
             x = [NodeType.InterpolatedVariableType];
-        pos += 3;
-        x.push(this.getIdent());
+        pos += 2;
+        while (tokens[pos].type !== TokenType.RightCurlyBracket)
+        {
+            if (this.checkValue(pos)) this.getValue();
+            else if (this.checkVariable(pos)) this.getVariable();
+            else if (this.checkOperator(pos)) this.getOperator();
+            else return 0;
+        }        
         pos++;
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
@@ -2268,7 +2293,7 @@ syntaxes.css = {
         var start = i,
             l;
         if (i >= tokensLength) return 0;
-        if (l = this.checkVariable(i) || this.checkIdent(i) || this.checkInterpolatedVariable(i)) i += l;
+        if (l = this.checkVariable(i) || this.checkIdent(i) || this.checkInterpolatedExpression(i)) i += l;
         else return 0;
         if (l = this.checkSC(i)) i += l;
         return i - start;
@@ -2277,7 +2302,7 @@ syntaxes.css = {
         var startPos = pos,
             x = [NodeType.PropertyType];
         x.push(  this.checkVariable(pos) ? this.getVariable() 
-               : this.checkInterpolatedVariable(pos) ? this.getInterpolatedVariable() 
+               : this.checkInterpolatedExpression(pos) ? this.getInterpolatedExpression() 
                : this.getIdent());
         x = x.concat(this.getSC());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
@@ -2286,25 +2311,25 @@ syntaxes.css = {
         var l;
         if (i >= tokensLength || tokens[i++].type !== TokenType.Colon ||
             i >= tokensLength || tokens[i++].type !== TokenType.Colon) return 0;
-        return (l = this.checkInterpolatedVariable(i) || this.checkIdent(i)) ? l + 2 : 0;
+        return (l = this.checkInterpolatedExpression(i) || this.checkIdent(i)) ? l + 2 : 0;
     };
     scss.getPseudoe = function() {
         var startPos = pos,
             x = [NodeType.PseudoeType];
         pos += 2;
-        x.push(this.checkInterpolatedVariable(pos) ? this.getInterpolatedVariable() : this.getIdent());
+        x.push(this.checkInterpolatedExpression(pos) ? this.getInterpolatedExpression() : this.getIdent());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
     scss.checkPseudoc = function(i) {
         var l;
         if (i >= tokensLength || tokens[i++].type !== TokenType.Colon) return 0;
-        return (l = this.checkInterpolatedVariable(i) || this.checkFunction(i) || this.checkIdent(i)) ? l + 1 : 0;
+        return (l = this.checkInterpolatedExpression(i) || this.checkFunction(i) || this.checkIdent(i)) ? l + 1 : 0;
     };
     scss.getPseudoc = function() {
         var startPos = pos,
             x = [NodeType.PseudocType];
         pos ++;
-        if (this.checkInterpolatedVariable(pos)) x.push(this.getInterpolatedVariable());
+        if (this.checkInterpolatedExpression(pos)) x.push(this.getInterpolatedExpression());
         else if (this.checkFunction(pos)) x.push(this.getFunction());
         else x.push(this.getIdent());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
@@ -2336,7 +2361,7 @@ syntaxes.css = {
     };
     scss.checkSimpleSelector1 = function(i) {
         return this.checkParentSelector(i) ||
-            this.checkInterpolatedVariable(i) ||
+            this.checkInterpolatedExpression(i) ||
             this.checkNthselector(i) ||
             this.checkCombinator(i) ||
             this.checkAttrib(i) ||
@@ -2348,7 +2373,7 @@ syntaxes.css = {
     };
     scss.getSimpleSelector1 = function() {
         if (this.checkParentSelector(pos)) return this.getParentSelector();
-        else if (this.checkInterpolatedVariable(pos)) return this.getInterpolatedVariable();
+        else if (this.checkInterpolatedExpression(pos)) return this.getInterpolatedExpression();
         else if (this.checkNthselector(pos)) return this.getNthselector();
         else if (this.checkCombinator(pos)) return this.getCombinator();
         else if (this.checkAttrib(pos)) return this.getAttrib();
@@ -2421,7 +2446,7 @@ syntaxes.css = {
     };
     scss._checkValue = function(i) {
         return this.checkSC(i) ||
-            this.checkInterpolatedVariable(i) ||
+            this.checkInterpolatedExpression(i) ||
             this.checkVariable(i) ||
             this.checkVhash(i) ||
             this.checkBlock(i) ||
@@ -2447,7 +2472,7 @@ syntaxes.css = {
     };
     scss._getValue = function() {
         if (this.checkSC(pos)) return this.getSC();
-        else if (this.checkInterpolatedVariable(pos)) return this.getInterpolatedVariable();
+        else if (this.checkInterpolatedExpression(pos)) return this.getInterpolatedExpression();
         else if (this.checkVariable(pos)) return this.getVariable();
         else if (this.checkVhash(pos)) return this.getVhash();
         else if (this.checkBlock(pos)) return this.getBlock();
@@ -2457,7 +2482,7 @@ syntaxes.css = {
         else if (this.checkImportant(pos)) return this.getImportant();
         else if (this.checkDefault(pos)) return this.getDefault();
     };
-    scss.checkVariable = function(i) {
+    scss.checkVariable = function(i) {  
         var l;
         if (i >= tokensLength || tokens[i].type !== TokenType.DollarSign) return 0;
         return (l = this.checkIdent(i + 1)) ? l + 1 : 0;
@@ -3286,7 +3311,7 @@ syntaxes.css = {
         if (i >= tokensLength) return 0;
         if (tokens[i].class_l) return tokens[i].class_l;
         if (tokens[i++].type === TokenType.FullStop &&
-            (l = this.checkInterpolatedVariable(i) || this.checkIdent(i))) {
+            (l = this.checkInterpolatedExpression(i) || this.checkIdent(i))) {
             tokens[i].class_l = l + 1;
             return l + 1;
         }
@@ -3296,7 +3321,7 @@ syntaxes.css = {
         var startPos = pos,
             x = [NodeType.ClassType];
         pos++;
-        x.push(this.checkInterpolatedVariable(pos) ? this.getInterpolatedVariable() : this.getIdent());
+        x.push(this.checkInterpolatedExpression(pos) ? this.getInterpolatedExpression() : this.getIdent());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
     less.checkCommentSL = function(i) {
@@ -3403,7 +3428,7 @@ syntaxes.css = {
         else return 0;
         wasIdent = tokens[i - 1].type === TokenType.Identifier;
         for (; i < tokensLength; i++) {
-            if (l = this.checkInterpolatedVariable(i)) i += l;
+            if (l = this.checkInterpolatedExpression(i)) i += l;
             if (i >= tokensLength) break;
             if (tokens[i].type !== TokenType.HyphenMinus &&
                 tokens[i].type !== TokenType.LowLine) {
@@ -3506,7 +3531,7 @@ syntaxes.css = {
         }
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
-    less.checkInterpolatedVariable = function(i) {
+    less.checkInterpolatedExpression = function(i) {
         var start = i,
             l;
         if (i >= tokensLength) return 0;
@@ -3517,7 +3542,7 @@ syntaxes.css = {
         else return 0;
         return tokens[i].type === TokenType.RightCurlyBracket ? i - start + 1 : 0;
     };
-    less.getInterpolatedVariable = function() {
+    less.getInterpolatedExpression = function() {
         var startPos = pos,
             x = [NodeType.InterpolatedVariableType];
         pos += 2;
@@ -3592,25 +3617,25 @@ syntaxes.css = {
         var l;
         if (i >= tokensLength || tokens[i++].type !== TokenType.Colon ||
             i >= tokensLength || tokens[i++].type !== TokenType.Colon) return 0;
-        return (l = this.checkInterpolatedVariable(i) || this.checkIdent(i)) ? l + 2 : 0;
+        return (l = this.checkInterpolatedExpression(i) || this.checkIdent(i)) ? l + 2 : 0;
     };
     less.getPseudoe = function() {
         var startPos = pos,
             x = [NodeType.PseudoeType];
         pos += 2;
-        x.push(this.checkInterpolatedVariable(pos) ? this.getInterpolatedVariable() : this.getIdent());
+        x.push(this.checkInterpolatedExpression(pos) ? this.getInterpolatedExpression() : this.getIdent());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
     less.checkPseudoc = function(i) {
         var l;
         if (i >= tokensLength || tokens[i++].type !== TokenType.Colon) return 0;
-        return (l = this.checkInterpolatedVariable(i) || this.checkFunction(i) || this.checkIdent(i)) ? l + 1 : 0;
+        return (l = this.checkInterpolatedExpression(i) || this.checkFunction(i) || this.checkIdent(i)) ? l + 1 : 0;
     };
     less.getPseudoc = function() {
         var startPos = pos,
             x = [NodeType.PseudocType];
         pos ++;
-        if (this.checkInterpolatedVariable(pos)) x.push(this.getInterpolatedVariable());
+        if (this.checkInterpolatedExpression(pos)) x.push(this.getInterpolatedExpression());
         else if (this.checkFunction(pos)) x.push(this.getFunction());
         else x.push(this.getIdent());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
@@ -3724,7 +3749,7 @@ syntaxes.css = {
     less._checkValue = function(i) {
         return this.checkSC(i) ||
             this.checkEscapedString(i) ||
-            this.checkInterpolatedVariable(i) ||
+            this.checkInterpolatedExpression(i) ||
             this.checkVariable(i) ||
             this.checkVhash(i) ||
             this.checkBlock(i) ||
@@ -3750,7 +3775,7 @@ syntaxes.css = {
     less._getValue = function() {
         if (this.checkSC(pos)) return this.getSC();
         else if (this.checkEscapedString(pos)) return this.getEscapedString();
-        else if (this.checkInterpolatedVariable(pos)) return this.getInterpolatedVariable();
+        else if (this.checkInterpolatedExpression(pos)) return this.getInterpolatedExpression();
         else if (this.checkVariable(pos)) return this.getVariable();
         else if (this.checkVhash(pos)) return this.getVhash();
         else if (this.checkBlock(pos)) return this.getBlock();

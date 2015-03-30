@@ -118,3 +118,5 @@ this.checkInterpolatedVariable(i) ||
 // added in line 2343
 else if (this.checkInterpolatedVariable(pos)) return this.getInterpolatedVariable();
 ```
+
+ - Other changes to the parser are visible in the history of /parser/gonzales.css-to-ast.js.

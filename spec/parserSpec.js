@@ -25,7 +25,7 @@ describe('Parser', function() {
       return expect(o).to.be("\nMatch - 2 instances\n" + file + ":1,5\n" + file + ":12,16\n");
     });
   });
-  return it('should parse stylesheet with comments inside ruleset correctly', function() {
+  it('should parse stylesheet with comments inside ruleset correctly', function() {
     var file;
     file = fixtures.comments2;
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'comments2', {
@@ -33,6 +33,26 @@ describe('Parser', function() {
       ignoreSummary: true
     }, function(o) {
       return expect(o).to.be("\nMatch - 2 instances\n" + file + ":1,5\n" + file + ":7,15\n");
+    });
+  });
+  it('should parse stylesheet with import statements without exception', function() {
+    var file;
+    file = fixtures['import-strings'];
+    return helpers.safeTestOutput(Inspector, DefaultReporter, 'import-strings', {
+      diff: false,
+      ignoreSummary: true
+    }, function(o) {
+      return expect(o).to.be('');
+    });
+  });
+  return it('should parse interpolation in calc without exception', function() {
+    var file;
+    file = fixtures['interpolation-calc'];
+    return helpers.safeTestOutput(Inspector, DefaultReporter, 'interpolation-calc', {
+      diff: false,
+      ignoreSummary: true
+    }, function(o) {
+      return expect(o).to.be('');
     });
   });
 });

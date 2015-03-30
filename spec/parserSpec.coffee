@@ -31,3 +31,14 @@ describe 'Parser', ->
             #{file}:7,15
 
             """
+
+    it 'should parse stylesheet with import statements without exception', ->
+        file = fixtures['import-strings']
+        helpers.safeTestOutput Inspector, DefaultReporter, 'import-strings', {diff: false, ignoreSummary: true}, (o) ->
+            expect(o).to.be '' 
+
+
+    it 'should parse interpolation in calc without exception', ->
+        file = fixtures['interpolation-calc']
+        helpers.safeTestOutput Inspector, DefaultReporter, 'interpolation-calc', {diff: false, ignoreSummary: true}, (o) ->
+            expect(o).to.be '' 
