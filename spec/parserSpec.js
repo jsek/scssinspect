@@ -36,8 +36,6 @@ describe('Parser', function() {
     });
   });
   it('should parse stylesheet with import statements without exception', function() {
-    var file;
-    file = fixtures['import-strings'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'import-strings', {
       diff: false,
       ignoreSummary: true
@@ -46,8 +44,6 @@ describe('Parser', function() {
     });
   });
   it('should parse interpolation in calc without exception', function() {
-    var file;
-    file = fixtures['interpolation-calc'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'interpolation-calc', {
       diff: false,
       ignoreSummary: true
@@ -56,8 +52,6 @@ describe('Parser', function() {
     });
   });
   it('should parse functions inside interpolation without exception', function() {
-    var file;
-    file = fixtures['interpolation-functions'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'interpolation-functions', {
       diff: false,
       ignoreSummary: true
@@ -66,8 +60,6 @@ describe('Parser', function() {
     });
   });
   xit('should parse media-queries without exception', function() {
-    var file;
-    file = fixtures['media-queries'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'media-queries', {
       diff: false,
       ignoreSummary: true
@@ -75,9 +67,7 @@ describe('Parser', function() {
       return expect(o).to.be('');
     });
   });
-  xit('should parse negative values without exception', function() {
-    var file;
-    file = fixtures['negative-values'];
+  it('should parse negative values without exception', function() {
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'negative-values', {
       diff: false,
       ignoreSummary: true
@@ -86,8 +76,6 @@ describe('Parser', function() {
     });
   });
   it('should parse nested functions without exception', function() {
-    var file;
-    file = fixtures['nested-functions'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'nested-functions', {
       diff: false,
       ignoreSummary: true
@@ -96,8 +84,6 @@ describe('Parser', function() {
     });
   });
   xit('should parse expressions inside url() without exception', function() {
-    var file;
-    file = fixtures['expression-in-url'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'expression-in-url', {
       diff: false,
       ignoreSummary: true
@@ -106,8 +92,6 @@ describe('Parser', function() {
     });
   });
   return it('should parse variables assignment without exception', function() {
-    var file;
-    file = fixtures['media-queries'];
     return helpers.safeTestOutput(Inspector, DefaultReporter, 'variables', {
       diff: false,
       ignoreSummary: true

@@ -13,7 +13,7 @@ fixtures        = [
     'intersection'
     'intersection-diff'
     'media-queries'
-    'negaitve-values'
+    'negative-values'
     'nested-functions'
     'no-match'
     'variables'

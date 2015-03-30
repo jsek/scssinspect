@@ -52,9 +52,9 @@ describe 'Parser', ->
             expect(o).to.be '' 
 
 
-    xit 'should parse negative values without exception', ->
+    it 'should parse negative values without exception', ->
         helpers.safeTestOutput Inspector, DefaultReporter, 'negative-values', {diff: false, ignoreSummary: true}, (o) ->
-            expect(o).to.be '' 
+            expect(o).to.be ''
             
             
     it 'should parse nested functions without exception', ->
