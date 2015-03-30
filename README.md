@@ -63,7 +63,6 @@ be used in place of the defaults listed above. For example:
         
  - Parser issues:
     - @media queries cause infinite loop
-    - inline if() statements are not supported
 
 ## Required parser patches
 
