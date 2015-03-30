@@ -2,6 +2,13 @@
 
 Detect copy-pasted and structurally similar code in your Scss stylesheets.
 
+
+[![NPM info](https://nodei.co/npm/scssinspect.png?downloads=true)](https://nodei.co/npm/scssinspect.png?downloads=true)
+
+[![dependencies](https://david-dm.org/jsek/scssinspect.png)](https://david-dm.org/jsek/scssinspect)
+
+[![issues](http://issuestats.com/github/jsek/scssinspect/badge/issue.png)](http://issuestats.com/github/jsek/scssinspect/badge/issue)
+
 * [Overview](#overview)
 * [Installation](#installation)
 * [Usage](#usage)
@@ -54,11 +61,7 @@ be used in place of the defaults listed above. For example:
         
  - Diff works on files where line break is always \r\n
  - Parser issues:
-    - expressions inside interpolation when there is `-` sign used
-    - functions calls inside calc() or another function are not supported
-    - @media queries causes exceptions
-    - imports require single quotes `'`
-    - !global is not supported
+    - @media queries cause infinite loop
 
 ## Required parser patches
 
