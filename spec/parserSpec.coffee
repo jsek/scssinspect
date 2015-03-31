@@ -32,41 +32,30 @@ describe 'Parser', ->
 
             """
 
-    it 'should parse stylesheet with import statements without exception', ->
-        helpers.safeTestOutput Inspector, DefaultReporter, 'import-strings', {diff: false, ignoreSummary: true}, (o) ->
-            expect(o).to.be '' 
+    expectNoParsingErrors = (fixtureName) ->
+        helpers.safeTestOutput Inspector, DefaultReporter, fixtureName, {diff: false, ignoreSummary: true}, (o) ->
+            expect(o).to.be ''
 
+    it 'should parse stylesheet with import statements without exception', ->
+        expectNoParsingErrors 'import-strings'
 
     it 'should parse interpolation in calc without exception', ->
-        helpers.safeTestOutput Inspector, DefaultReporter, 'interpolation-calc', {diff: false, ignoreSummary: true}, (o) ->
-            expect(o).to.be '' 
-
+        expectNoParsingErrors 'interpolation-calc'
 
     it 'should parse functions inside interpolation without exception', ->
-        helpers.safeTestOutput Inspector, DefaultReporter, 'interpolation-functions', {diff: false, ignoreSummary: true}, (o) ->
-            expect(o).to.be '' 
-
+        expectNoParsingErrors 'interpolation-functions'
 
     xit 'should parse media-queries without exception', ->
-        helpers.safeTestOutput Inspector, DefaultReporter, 'media-queries', {diff: false, ignoreSummary: true}, (o) ->
-            expect(o).to.be '' 
-
+        expectNoParsingErrors 'media-queries'
 
     it 'should parse negative values without exception', ->
-        helpers.safeTestOutput Inspector, DefaultReporter, 'negative-values', {diff: false, ignoreSummary: true}, (o) ->
-            expect(o).to.be ''
-            
+        expectNoParsingErrors 'negative-values'
             
     it 'should parse nested functions without exception', ->
-        helpers.safeTestOutput Inspector, DefaultReporter, 'nested-functions', {diff: false, ignoreSummary: true}, (o) ->
-            expect(o).to.be '' 
-
+        expectNoParsingErrors 'nested-functions'
             
     it 'should parse expressions inside url() without exception', ->
-        helpers.safeTestOutput Inspector, DefaultReporter, 'expression-in-url', {diff: false, ignoreSummary: true}, (o) ->
-            expect(o).to.be '' 
-
+        expectNoParsingErrors 'expression-in-url'
             
     it 'should parse variables assignment without exception', ->
-        helpers.safeTestOutput Inspector, DefaultReporter, 'variables', {diff: false, ignoreSummary: true}, (o) ->
-            expect(o).to.be '' 
+        expectNoParsingErrors 'variables'

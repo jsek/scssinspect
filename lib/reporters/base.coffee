@@ -54,11 +54,11 @@ class BaseReporter
             skipped = if @_skipped then " (#{@_skipped} #{pluralize(@_skipped,'file')} skipped)" else ''
             
             unless @_found
-                found = chalk.black.bgGreen "\n No matches found across #{checked}"
+                found = chalk.black.bgGreen " No matches found across #{checked} "
             else
-                found = chalk.white.bgRed "\n #{@_found} #{pluralizeE(@_found,'match')} found across #{checked}"
+                found = chalk.white.bgRed " #{@_found} #{pluralizeE(@_found,'match')} found across #{checked} "
             
-            process.stdout.write found + skipped + '\n'
+            process.stdout.write '\n' + found + skipped + '\n'
 
     ###*
     # Accepts a diff object and returns a corresponding formatted diff string.

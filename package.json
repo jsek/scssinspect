@@ -34,6 +34,6 @@
     "scssinspect": "./bin/scssinspect"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha -R spec spec spec/reporters"
+    "test": "./node_modules/.bin/mocha --recursive spec"
   }
 }

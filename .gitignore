@@ -18,6 +18,9 @@ node_modules
 .grunt
 .DS_Store
 
+.idea
+*.map
+
 .sass-cache
 _README
 
