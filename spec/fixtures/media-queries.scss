@@ -1,5 +1,5 @@
 @mixin print {
-	@media only print {
+	@media (only print) {
         @if (&) {
 		    & { @content; }
         }
@@ -11,7 +11,7 @@
 
 
 @mixin media-for-pc($option) {
-    @media #{$option} {
+    @media (#{$option}) {
         @if (&) {
   		    body:not(.responsive) & { @content; }
         }

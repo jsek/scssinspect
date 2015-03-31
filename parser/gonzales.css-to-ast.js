@@ -84,6 +84,7 @@ var TokenType = {
 };
 var NodeType = {
     ArgumentsType: 'arguments',
+    AtcontentType: 'atcontent',
     AtkeywordType: 'atkeyword',
     AtrulebType: 'atruleb',
     AtrulerType: 'atruler',
@@ -118,6 +119,7 @@ var NodeType = {
     IncludeType :'include',
     InterpolatedVariableType: 'interpolatedVariable',
     LoopType: 'loop',
+    MediaQueryType: 'mediaquery',
     MixinType: 'mixin',
     NamespaceType: 'namespace',
     NthType: 'nth',
@@ -235,6 +237,7 @@ var getTokens = (function() {
         pos = 0;
         tn = 0;
         ln = 1;
+        var counter1 = 1000;
         for (pos = 0; pos < css.length; pos++) {
             c = css.charAt(pos);
             cn = css.charAt(pos + 1);
@@ -251,8 +254,9 @@ var getTokens = (function() {
             else if (c === ' ') {
                 parseSpaces(css)
             }
-            else if ((c+cn) in Punctuation) {
+            else if ((c+cn) in Punctuation && cn.length > 0) {
                 pushToken(Punctuation[c+cn], c+cn);
+                pos += 2;
             }
             else if (c in Punctuation) {
                 pushToken(Punctuation[c], c);
@@ -279,6 +283,7 @@ var getTokens = (function() {
 }());
 var rules = {
     'arguments': function() { if (s.checkArguments(pos)) return s.getArguments() },
+    'atcontent': function() { if (s.checkAtcontent(pos)) return s.getAtcontent() },
     'atkeyword': function() { if (s.checkAtkeyword(pos)) return s.getAtkeyword() },
     'atruleb': function() { if (s.checkAtruleb(pos)) return s.getAtruleb() },
     'atruler': function() { if (s.checkAtruler(pos)) return s.getAtruler() },
@@ -310,6 +315,7 @@ var rules = {
     'include': function () { if (s.checkInclude(pos)) return s.getInclude() },
     'interpolatedVariable': function () { if (s.checkInterpolatedExpression(pos)) return s.getInterpolatedExpression() },
     'loop': function() { if (s.checkLoop(pos)) return s.getLoop() },
+    'mediaQuery': function () { if (s.checkMediaQuery(pos)) return s.getMediaQuery() },
     'mixin': function () { if (s.checkMixin(pos)) return s.getMixin() },
     'namespace': function() { if (s.checkNamespace(pos)) return s.getNamespace() },
     'nth': function() { if (s.checkNth(pos)) return s.getNth() },
@@ -646,9 +652,10 @@ syntaxes.css = {
         var start = i,
             l;
         if (l = this.checkSC(i)) i += l;
-        if (l = this.checkFilter(i)) tokens[i].bd_kind = 1;
-        else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 2;
-        else if (l = this.checkAtrule(i)) tokens[i].bd_kind = 3;
+        if (l = this.checkMediaQuery(i)) tokens[i].bd_kind = 1;
+        if (l = this.checkFilter(i)) tokens[i].bd_kind = 2;
+        else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 3;
+        else if (l = this.checkAtrule(i)) tokens[i].bd_kind = 4;
         else return 0;
         i += l;
         if (l = this.checkSC(i)) i += l;
@@ -662,9 +669,12 @@ syntaxes.css = {
                 x = this.getFilter();
                 break;
             case 2:
-                x = this.getDeclaration();
+                x = this.getMediaQuery();
                 break;
             case 3:
+                x = this.getDeclaration();
+                break;
+            case 4:
                 x = this.getAtrule();
                 break;
         }
@@ -1002,6 +1012,28 @@ syntaxes.css = {
         pos++;
         x = x.concat(this.getSC());
         pos++;
+        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+    },
+    checkMediaQuery: function(i) {
+        var start = i,
+            l;
+        if (i >= tokensLength) return 0;
+        if ((l = this.checkAtkeyword(i)) && tokens[i + 1].value === 'media') i += l;
+        else return 0;
+        if (l = this.checkSC(i)) i += l;
+        if (l = this.checkArguments(i)) i += l;
+        if (l = this.checkSC(i)) i += l;
+        if (l = this.checkBlock(i)) i += l;
+        else return 0;
+        return i - start;
+    },
+    getMediaQuery: function() {
+        var startPos = pos,
+            x = [NodeType.MediaQueryType, this.getAtkeyword()];
+        x = x.concat(this.getSC());
+        if (this.checkArguments(pos)) x.push(this.getArguments());
+        x = x.concat(this.getSC());
+        if (this.checkBlock(pos)) x.push(this.getBlock());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     },
     checkNamespace: function(i) {
@@ -1445,6 +1477,7 @@ syntaxes.css = {
             if (l = this.checkSC(i) ||
                 this.checkDeclDelim(i) ||
                 this.checkAtrule(i) ||
+                this.checkMediaQuery(i) ||
                 this.checkRuleset(i) ||
                 this.checkUnknown(i)) i += l;
             else throwError(i);
@@ -1458,6 +1491,7 @@ syntaxes.css = {
             if (this.checkSC(pos)) x = x.concat(this.getSC());
             else if (this.checkRuleset(pos)) x.push(this.getRuleset());
             else if (this.checkAtrule(pos)) x.push(this.getAtrule());
+            else if (this.checkMediaQuery(pos)) x.push(this.getMediaQuery());
             else if (this.checkDeclDelim(pos)) x.push(this.getDeclDelim());
             else if (this.checkUnknown(pos)) x.push(this.getUnknown());
             else throwError();
@@ -1801,6 +1835,18 @@ syntaxes.css = {
         else if (this.checkVhash(pos)) return this.getVhash();
         else if (this.checkValue(pos)) return this.getValue();
     };
+    scss.checkAtcontent = function(i) {
+        var l;
+        if (i >= tokensLength) return 0;
+        if ((l = this.checkAtkeyword(i)) && tokens[i + 1].value === 'content') return l;
+        else return 0;
+    };
+    scss.getAtcontent = function() {
+        var startPos = pos,
+            x = [NodeType.AtcontentType, this.getAtkeyword()];
+        pos++;
+        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+    };
     scss.checkBlockdecl1 = function(i) {
         var start = i,
             l;
@@ -1856,12 +1902,14 @@ syntaxes.css = {
             l;
         if (l = this.checkSC(i)) i += l;
         if (l = this.checkCondition(i)) tokens[i].bd_kind = 1;
-        else if (l = this.checkInclude(i)) tokens[i].bd_kind = 2;
-        else if (l = this.checkLoop(i)) tokens[i].bd_kind = 3;
-        else if (l = this.checkFilter(i)) tokens[i].bd_kind = 4;
-        else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 5;
-        else if (l = this.checkAtrule(i)) tokens[i].bd_kind = 6;
-        else if (l = this.checkRuleset(i)) tokens[i].bd_kind = 7;
+        else if (l = this.checkAtcontent(i)) tokens[i].bd_kind = 2;
+        else if (l = this.checkMediaQuery(i)) tokens[i].bd_kind = 3;
+        else if (l = this.checkInclude(i)) tokens[i].bd_kind = 4;
+        else if (l = this.checkLoop(i)) tokens[i].bd_kind = 5;
+        else if (l = this.checkFilter(i)) tokens[i].bd_kind = 6;
+        else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 7;
+        else if (l = this.checkAtrule(i)) tokens[i].bd_kind = 8;
+        else if (l = this.checkRuleset(i)) tokens[i].bd_kind = 9;
         else return 0;
         i += l;
         if (l = this.checkSC(i)) i += l;
@@ -1875,21 +1923,27 @@ syntaxes.css = {
                 x = this.getCondition();
                 break;
             case 2:
-                x = this.getInclude();
+                x = this.getAtcontent();
                 break;
             case 3:
-                x = this.getLoop();
+                x = this.getMediaQuery();
                 break;
             case 4:
-                x = this.getFilter();
+                x = this.getInclude();
                 break;
             case 5:
-                x = this.getDeclaration();
+                x = this.getLoop();
                 break;
             case 6:
-                x = this.getAtrule();
+                x = this.getFilter();
                 break;
             case 7:
+                x = this.getDeclaration();
+                break;
+            case 8:
+                x = this.getAtrule();
+                break;
+            case 9:
                 x = this.getRuleset();
                 break;
         }
@@ -2442,6 +2496,7 @@ syntaxes.css = {
                 this.checkDeclaration(i) ||
                 this.checkDeclDelim(i) ||
                 this.checkInclude(i) ||
+                this.checkMediaQuery(i) ||
                 this.checkMixin(i) ||
                 this.checkLoop(i) ||
                 this.checkAtrule(i) ||
@@ -2457,6 +2512,7 @@ syntaxes.css = {
             if (this.checkSC(pos)) x = x.concat(this.getSC());
             else if (this.checkRuleset(pos)) x.push(this.getRuleset());
             else if (this.checkInclude(pos)) x.push(this.getInclude());
+            else if (this.checkMediaQuery(pos)) x.push(this.getMediaQuery());
             else if (this.checkMixin(pos)) x.push(this.getMixin());
             else if (this.checkLoop(pos)) x.push(this.getLoop());
             else if (this.checkAtrule(pos)) x.push(this.getAtrule());
