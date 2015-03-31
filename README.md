@@ -59,4 +59,4 @@ be used in place of the defaults listed above. For example:
 ## Known issues
         
  - Parser issues:
-    - @media queries cause infinite loop
+    - Sometimes parsing base64 values is causing exception
