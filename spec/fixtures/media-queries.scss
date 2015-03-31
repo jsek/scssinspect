@@ -1,11 +1,17 @@
+@media (only screen) {
+    @if (&) {
+        & { @content; }
+    }
+    @else { @content; }
+}
+
+
 @mixin print {
 	@media (only print) {
         @if (&) {
 		    & { @content; }
         }
-        @else {
-		    @content;
-        }
+        @else { @content; }
     }
 }
 

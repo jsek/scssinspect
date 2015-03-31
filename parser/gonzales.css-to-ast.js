@@ -1816,7 +1816,8 @@ syntaxes.css = {
             this.checkUri(i) ||
             this.checkIdent(i) ||
             this.checkVhash(i) ||
-            this.checkValue(i);
+            this.checkValue(i) ||
+            this.checkParentSelector(i);
     };
     scss.getArgument = function() {
         if (this.checkDeclaration(pos)) return this.getDeclaration();
@@ -1834,6 +1835,7 @@ syntaxes.css = {
         else if (this.checkIdent(pos)) return this.getIdent();
         else if (this.checkVhash(pos)) return this.getVhash();
         else if (this.checkValue(pos)) return this.getValue();
+        else if (this.checkParentSelector(pos)) return this.getParentSelector();
     };
     scss.checkAtcontent = function(i) {
         var l;
@@ -1993,7 +1995,8 @@ syntaxes.css = {
                      this.checkNumber(i) ||
                      this.checkOperator(i) ||
                      this.checkCombinator(i) ||
-                     this.checkString(i)) i += l;
+                     this.checkString(i) ||
+                     this.checkArguments(i)) i += l;
             else return 0;
         }
         return i - start;
@@ -2011,6 +2014,7 @@ syntaxes.css = {
             else if (this.checkCombinator(pos)) x.push(this.getCombinator());
             else if (this.checkSC(pos)) x = x.concat(this.getSC());
             else if (this.checkString(pos)) x.push(this.getString());
+            else if (this.checkArguments(pos)) x.push(this.getArguments());
         }
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
