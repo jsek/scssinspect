@@ -2,6 +2,7 @@ path    = require('path')
 
 absolutePaths   = {}
 fixtures        = [ 
+    'base64'
     'comments1'
     'comments2'
     'expression-in-url'
