@@ -45,7 +45,7 @@ describe 'Parser', ->
     it 'should parse functions inside interpolation without exception', ->
         expectNoParsingErrors 'interpolation-functions'
 
-    xit 'should parse media-queries without exception', ->
+    it 'should parse media-queries without exception', ->
         expectNoParsingErrors 'media-queries'
 
     it 'should parse negative values without exception', ->
