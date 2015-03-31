@@ -14,6 +14,7 @@ class Inspector extends EventEmitter
         @_ignoreValues  = opts['ignore-values']
         @_diff          = opts.diff
         @_skip          = opts.skip
+        @_syntax        = opts.syntax
         @_hash          = Object.create(null)
         @numFiles       = @_filePaths.length
         if @_diff
@@ -41,15 +42,21 @@ class Inspector extends EventEmitter
                 else
                     throw err
 
-        @_analyze()
-        @emit 'end'
+        unless @_syntax
+            @_analyze()
+            @emit 'end'
 
 
     _parse: (filePath, contents) ->
         syntaxTree = parse(css: contents, syntax: 'scss', needInfo: true)
-        @_walk syntaxTree, (rule) => 
-            @_insert rule
-            rule.loc.source = filePath
+
+        if @_syntax
+            console.log syntaxTree
+
+        else
+            @_walk syntaxTree, (rule) =>
+                @_insert rule
+                rule.loc.source = filePath
 
 
     _analyze: ->

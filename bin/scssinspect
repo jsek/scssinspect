@@ -18,6 +18,7 @@ program
   .usage('[options] <paths ...>\n\n' + summary)
 //  .option('-t, --threshold <number>'    , 'number of nodes (default: 15)', parseInt)
 //  .option('-i, --ignore-values'         , 'don\'t match exact numeric/color values')
+  .option('--syntax'                    , 'print syntax trees only')
   .option('-c, --config'                , 'path to config file (default: .scssinspectrc)')
   .option('-s, --skip'                  , 'skip files with parsing errors')
 //  .option('-r, --reporter [default|json]', 'specify the reporter to use (you can apply your own, just use path to *.js file)')
@@ -84,6 +85,7 @@ var inspector = new Inspector(paths, {
     threshold       : program.threshold,
     diff            : program.diff,
     skip            : program.skip,
+    syntax          : program.syntax,
     'ignore-values' : program['ignore-values']
 });
 
