@@ -21,7 +21,7 @@ program
   .option('--syntax'                    , 'print syntax trees only')
   .option('-c, --config'                , 'path to config file (default: .scssinspectrc)')
   .option('-s, --skip'                  , 'skip files with parsing errors')
-//  .option('-r, --reporter [default|json]', 'specify the reporter to use (you can apply your own, just use path to *.js file)')
+  .option('-r, --reporter <name>'       , 'specify the reporter to use (you can also set custom path to *.js file)')
 //  .option('-s, --suppress <number>'     , 'length to suppress diffs (default: 100, off: 0)', parseInt)
   .option('-D, --no-diff'               , 'disable 2-way diffs')
   .option('-C, --no-color'              , 'disable colors')
@@ -43,7 +43,7 @@ if (fs.existsSync(rcPath) && fs.lstatSync(rcPath).isFile()) {
         process.exit(1);
     }
 
-  ['threshold', 'ignore-values', 'ignore', 'reporter', 'suppress']
+  ['diff', 'ignore', 'reporter', 'skip']
       .forEach(function (option) {
         if (program[option] === undefined && (option in rc)) {
             program[option] = rc[option];
@@ -90,7 +90,12 @@ var inspector = new Inspector(paths, {
 });
 
 // Retrieve the requested reporter
-var reporterType = reporters[program.reporter] || reporters.default;
+var reporterType;
+if (/[\\\/]/g.test(program.reporter)) {
+    reporterType = require(process.cwd() + program.reporter.replace(/^.\\/,'\\'));
+} else {
+    reporterType = reporters[program.reporter] || reporters.default;
+}
 new reporterType(inspector, {
     diff        : program.diff,
     suppress    : program.suppress

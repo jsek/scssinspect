@@ -41,6 +41,7 @@ Options:
   -V, --version                      output the version number
       --syntax                       print syntax trees only
   -c, --config                       path to config file (default: .scssinspectrc)
+  -r, --reporter <name>              specify the reporter to use (you can also set custom path to *.js file)
   -s, --skip                         skip files with parsing errors
   -D, --no-diff                      disable 2-way diffs
   -C, --no-color                     disable colors
@@ -52,7 +53,10 @@ be used in place of the defaults listed above. For example:
 
 ``` javascript
 {
-  "ignore"        : "bootstrap|legacy|lib", // used as RegExp
+  "diff"          : "true",
+  "reporter"      : "html",
+  "skip"          : "false",
+  "ignore"        : "bootstrap|legacy|lib" // used as RegExp
 }
 ```
 

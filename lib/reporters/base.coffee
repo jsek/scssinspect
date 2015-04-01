@@ -3,12 +3,6 @@ path    = require('path')
 chalk   = require('chalk')
 
 ###*
-# Helpers
-###
-pluralize = (count, text) -> unless count is 1 then text + 's' else text
-pluralizeE = (count, text) -> unless count is 1 then text + 'es' else text
-
-###*
 # A base reporter from which all others inherit. Registers a listener on the
 # passed inspector instance for tracking the number of matches found.
 ###
@@ -25,6 +19,12 @@ class BaseReporter
         @_skipped = 0
         @_suppress = if opts.suppress == 0 then 0 else opts.suppress or 1000
         @_registerListener()
+
+    ###*
+    # Helpers
+    ###
+    _pluralize : (count, text) -> unless count is 1 then text + 's' else text
+    _pluralizeE : (count, text) -> unless count is 1 then text + 'es' else text
 
     ###*
     # Registers a listener to the "match" event exposed by the Inspector instance.
@@ -50,13 +50,13 @@ class BaseReporter
         @_inspector.on 'end', =>
             found = ''
             numFiles = @_inspector.numFiles
-            checked = "#{numFiles} #{pluralize(numFiles,'file')}"
-            skipped = if @_skipped then " (#{@_skipped} #{pluralize(@_skipped,'file')} skipped)" else ''
+            checked = "#{numFiles} #{@_pluralize(numFiles,'file')}"
+            skipped = if @_skipped then " (#{@_skipped} #{@_pluralize(@_skipped,'file')} skipped)" else ''
             
             unless @_found
                 found = chalk.black.bgGreen " No matches found across #{checked} "
             else
-                found = chalk.white.bgRed " #{@_found} #{pluralizeE(@_found,'match')} found across #{checked} "
+                found = chalk.white.bgRed " #{@_found} #{@_pluralizeE(@_found,'match')} found across #{checked} "
             
             process.stdout.write '\n' + found + skipped + '\n'
 

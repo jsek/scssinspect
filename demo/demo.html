@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <link rel='stylesheet' href='demo.css' />
+    <title>Thu Apr 02 2015 00:47:00 GMT+0200 (Central European Daylight Time)</title>
+</head>
+<body><div class='warn'><b>WARNING<b>: Cannot parse file <span class='warn-file'>.\spec\fixtures\base64.scss</span><br> &gt; Please check the validity of the CSS block starting from the line #2</div><header>Match - 2 instances</header><h3>.\demo\a.scss:2,2</h3><h3>.\demo\b.scss:2,5</h3><pre class='diff'><code class='diff-files'>- .\demo\a.scss:2,2
++ .\demo\b.scss:2,5
+</code>
+<code class='line-added'>+   div { </code>
+<code class='line-added'>+       border: none;</code>
+<code class='line-added'>+       color: red;</code>
+<code class='line-added'>+   }</code>
+<code class='line-removed'>-   div { color: red; border: none; }</code>
+</pre><header>Match - 3 instances</header><h3>.\demo\a.scss:3,3</h3><h3>.\demo\a.scss:6,6</h3><h3>.\demo\b.scss:6,8</h3><pre class='diff'><code class='diff-files'>- .\demo\a.scss:3,3
++ .\demo\a.scss:6,6
+</code>
+    .a,.b { color: #fff; }
+</pre><pre class='diff'><code class='diff-files'>- .\demo\a.scss:3,3
++ .\demo\b.scss:6,8
+</code>
+<code class='line-added'>+   .b, .a { </code>
+<code class='line-added'>+       color: #fff; </code>
+<code class='line-added'>+   }</code>
+<code class='line-removed'>-   .a,.b { color: #fff; }</code>
+</pre><footer><span class='failure'>2 matches found across 3 files</span><span class='skipped'>1 file skipped</span></footer></body>
+</html>
