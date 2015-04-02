@@ -49,7 +49,7 @@ class HtmlReporter extends BaseReporter
         return output
 
     _getWarning: (warn) ->
-        return "<div class='warn'><b>WARNING<b>: #{warn.message} <span class='warn-file'>#{warn.path}</span><br> &gt; #{warn.error.message}</div>"
+        return "<div class='warn'><b>WARNING</b>: #{warn.message} <span class='warn-file'>#{warn.path}</span><br> &gt; #{warn.error.message}</div>"
 
     _registerSummary: ->
         @_inspector.on 'end', =>

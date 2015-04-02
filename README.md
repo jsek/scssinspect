@@ -16,7 +16,11 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 
 ## Overview
 
+Example console output:
+
 ![screenshot](images/screenshot_0.1.4.png)
+
+[Example HTML report](https://github.com/jsek/scssinspect/blob/master/images/html-reporter_0.2.1.png)
 
 ## Installation
 

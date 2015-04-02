@@ -1,9 +1,14 @@
 body {
-    font-family:'Calibri Light', sans-serif;
+    font-family: 'Calibri Light', sans-serif;
     background: #333;
     color: #eee;
     padding-top: 2em;
+    text-shadow: 1px 1px #000;
 }
+
+/*
+ * Section headers
+ */
 
 header {
     font-size: 14px;
@@ -17,6 +22,9 @@ h3 {
     margin: .1em;
 }
 
+/*
+ * Summary
+ */
 
 footer {
     color: #eee;
@@ -40,6 +48,10 @@ footer {
     box-shadow: 0 3px 5px rgba(255,55,55,.5);
 }
 
+/*
+ * Warnings
+ */
+
 .skipped {
     right: 1em;
     top: .5em;
@@ -49,6 +61,7 @@ footer {
     font-size: .8em;
     padding: .3em .2em .1em;
     border-bottom: 1px solid yellow;
+    text-shadow: none;
 }
 
 .warn {
@@ -63,20 +76,21 @@ footer {
     color: cyan;
 }
 
+/*
+ * Diff
+ */
+
 .diff {
     padding: 1em;
     font-size: 10px;
     background: #222;
     color: #eee;
+    border-radius: 3px;
 }
 
 .diff-files {
     color: #bbb;
 }
 
-.line-added {
-    color: rgb(84, 204, 84);
-}
-.line-removed {
-    color: rgb(212, 94, 103);
-}
+.line-added     { color: rgb(84, 204, 84);  }
+.line-removed   { color: rgb(212, 94, 103); }
