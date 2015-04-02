@@ -17,7 +17,6 @@ class BaseReporter
     constructor: (@_inspector, opts = {}) ->
         @_found = 0
         @_skipped = 0
-        @_suppress = if opts.suppress == 0 then 0 else opts.suppress or 1000
         @_registerListener()
 
     ###*
@@ -79,9 +78,7 @@ class BaseReporter
                 lines = lines.slice(0, -1)
                 
             diffLength += lines.length
-            if @_suppress and diffLength > @_suppress
-                return "Diff suppressed as it exceeded #{@_suppress} lines\n"
-            
+
             for line in lines
                 if chunk.added
                     output += chalk.green("+   #{line}\n")

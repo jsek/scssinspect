@@ -29,8 +29,7 @@ describe 'Inspector', ->
 
         it 'accepts an options object', ->
             opts = 
-#                threshold: 12
-                diff: false
+                diff: 'none'
                 
             inspector = new Inspector([], opts)
 #            expect(inspector._threshold).to.be opts.threshold
@@ -79,7 +78,10 @@ describe 'Inspector', ->
 
 
     it 'includes a diff with the match, if enabled', ->
-        inspector = new Inspector([ fixtures['intersection-diff'] ], diff:true)
+        opts =
+            threshold: 0
+            diff: 'lines'
+        inspector = new Inspector([ fixtures['intersection-diff'] ], opts)
         inspector.on 'match', listener
         inspector.run()
 

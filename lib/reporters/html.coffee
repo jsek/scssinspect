@@ -30,8 +30,8 @@ class HtmlReporter extends BaseReporter
             source = @_getFormattedLocation(node)
             output += "<h3>#{source.replace /\n/g,'<br>'}</h3>"
 
-            
-        if @_diff
+
+        unless @_diff is 'none'
             currentDiffIndex = 0
             
             for diff in match.diffs

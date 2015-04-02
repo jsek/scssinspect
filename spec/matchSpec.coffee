@@ -40,13 +40,14 @@ describe 'Match', ->
                 { loc: { start : { line: 10 }, end : { line: 13 }, source: file } }
             ]
             match = new Match(rules)
-            match.generateDiffs fixture.contents
+            match.generateDiffs fixture.contents, 'lines'
             expect(match.diffs).to.eql [ [
                 {
                     value: '''
                     .b, .a {
                     
                     '''
+                    count: 1
                     added: true
                     removed: undefined
                 }
@@ -55,6 +56,7 @@ describe 'Match', ->
                     .a, .b {
                     
                     '''
+                    count: 1
                     added: undefined
                     removed: true
                 }
@@ -65,14 +67,14 @@ describe 'Match', ->
                         color: blue;
                     
                     '''.slice(2)
-                    added: undefined
-                    removed: undefined
+                    count: 2
                 }
                 {
                     value: '''
                     .
                         z-index: 11; }
                     '''.slice(2)
+                    count: 1
                     added: true
                     removed: undefined
                 }
@@ -82,6 +84,7 @@ describe 'Match', ->
                         z-index: 11;
                     }
                     '''.slice(2)
+                    count: 2
                     added: undefined
                     removed: true
                 }
@@ -95,7 +98,7 @@ describe 'Match', ->
                 { loc: { start : { line: 10 }, end : { line: 14 }, source: file } }
             ]
             match = new Match(rules)
-            match.generateDiffs fixture.contents
+            match.generateDiffs fixture.contents, 'lines'
             expect(match.diffs).to.eql [ [
                 {
                     value: '''
@@ -117,21 +120,21 @@ describe 'Match', ->
                 { loc: { start : { line: 5 }, end : { line: 6 }, source: file } }
             ]
             match = new Match(rules)
-            match.generateDiffs fixture.contents
+            match.generateDiffs fixture.contents, 'lines'
             expect(match.diffs).to.eql [ [
                 {
                     value: '''
                     .sub-selector2, .sub-selector1 {
                     
                     '''
-                    added: undefined
-                    removed: undefined
+                    count: 1
                 }
                 {
                     value: '''
                     .
                         border: 2px solid red; }
                     '''.slice(2)
+                    count: 1
                     added: true
                     removed: undefined
                 }
@@ -141,6 +144,7 @@ describe 'Match', ->
                         border: 2px solid red;
                     }
                     '''.slice(2)
+                    count: 2
                     added: undefined
                     removed: true
                 }

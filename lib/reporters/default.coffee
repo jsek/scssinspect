@@ -37,9 +37,9 @@ class DefaultReporter extends BaseReporter
 
         for node in nodes
             source = @_getFormattedLocation(node) + '\n'
-            output += if @_diff then chalk.bold(source) else source
+            output += unless (@_diff is 'none') then chalk.bold(source) else source
             
-        if @_diff
+        unless @_diff is 'none'
             currentDiffIndex = 0
             for diff in match.diffs
                 currentDiffIndex++

@@ -12,7 +12,7 @@ class Match
     #
     # @param {Node[]} nodes An array of matching nodes
     ###
-    constructor: (@nodes) ->
+    constructor: (@nodes, diffType) ->
         @diffs = []
 
     ###*
@@ -24,11 +24,28 @@ class Match
     #
     # @param {object} fileContents The file paths and their contents
     ###
-    generateDiffs : (fileContents) ->
+    generateDiffs : (fileContents, diffType) ->
         base = @_getLines(fileContents, @nodes[0])
-        for node in @nodes[1..]
-            curr = @_getLines(fileContents, node)
-            @diffs.push diff.diffLines(base, curr)
+        method = @_getMethod(diffType)
+
+        if typeof method is 'function'
+            for node in @nodes[1..]
+                curr = @_getLines(fileContents, node)
+                @diffs.push @_getMethod(diffType)(base, curr)
+
+    ###*
+    # Returns a method from diff object for the given type.
+    #
+    # @param   {String} diffType The type of diff to show
+    # @returns {function} The method to diff the code
+    ###
+    _getMethod : (diffType) ->
+        if diffType is 'css'
+            return diff.diffCss
+        if diffType is 'lines'
+            return diff.diffLines
+
+        return null
 
     ###*
     # Returns a string containing the source lines for the supplied node.

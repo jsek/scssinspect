@@ -47,10 +47,10 @@ Options:
       --syntax                       print syntax trees only
   -c, --config                       path to config file (default: .scssinspectrc)
   -r, --reporter <name>              specify the reporter to use (you can also set custom path to *.js file)
+      --diff [css|lines|none]        type of diff to use (default: lines)
   -s, --skip                         skip files with parsing errors
-  -D, --no-diff                      disable 2-way diffs
   -C, --no-color                     disable colors
-  --ignore <pattern>                 ignore paths matching a regex
+      --ignore <pattern>             ignore paths matching a regex
 ```
 
 If a `.scssinspectrc` file is located in the project directory, its values will
@@ -59,7 +59,7 @@ be used in place of the defaults listed above. For example:
 ``` javascript
 {
   "threshold"     : 100,
-  "diff"          : "true",
+  "diff"          : "css",
   "reporter"      : "html",
   "skip"          : "false",
   "ignore"        : "bootstrap|legacy|lib" // used as RegExp

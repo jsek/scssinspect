@@ -71,27 +71,30 @@ describe('Match', function() {
         }
       ];
       match = new Match(rules);
-      match.generateDiffs(fixture.contents);
+      match.generateDiffs(fixture.contents, 'lines');
       return expect(match.diffs).to.eql([
         [
           {
             value: '.b, .a {\n',
+            count: 1,
             added: true,
             removed: void 0
           }, {
             value: '.a, .b {\n',
+            count: 1,
             added: void 0,
             removed: true
           }, {
             value: '.\n    border: 2px solid red;\n    color: blue;\n'.slice(2),
-            added: void 0,
-            removed: void 0
+            count: 2
           }, {
             value: '.\n    z-index: 11; }'.slice(2),
+            count: 1,
             added: true,
             removed: void 0
           }, {
             value: '.\n    z-index: 11;\n}'.slice(2),
+            count: 2,
             added: void 0,
             removed: true
           }
@@ -126,7 +129,7 @@ describe('Match', function() {
         }
       ];
       match = new Match(rules);
-      match.generateDiffs(fixture.contents);
+      match.generateDiffs(fixture.contents, 'lines');
       return expect(match.diffs).to.eql([
         [
           {
@@ -163,19 +166,20 @@ describe('Match', function() {
         }
       ];
       match = new Match(rules);
-      match.generateDiffs(fixture.contents);
+      match.generateDiffs(fixture.contents, 'lines');
       return expect(match.diffs).to.eql([
         [
           {
             value: '.sub-selector2, .sub-selector1 {\n',
-            added: void 0,
-            removed: void 0
+            count: 1
           }, {
             value: '.\n    border: 2px solid red; }'.slice(2),
+            count: 1,
             added: true,
             removed: void 0
           }, {
             value: '.\n    border: 2px solid red;\n}'.slice(2),
+            count: 2,
             added: void 0,
             removed: true
           }

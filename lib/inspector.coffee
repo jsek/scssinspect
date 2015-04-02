@@ -17,7 +17,7 @@ class Inspector extends EventEmitter
         @_syntax        = opts.syntax
         @_hash          = Object.create(null)
         @numFiles       = @_filePaths.length
-        if @_diff
+        unless @_diff is 'none'
             @_fileContents = {}
 
 
@@ -28,7 +28,7 @@ class Inspector extends EventEmitter
         for filePath in @_filePaths
             filePath = filePath.replace /\//g,'\\'
             contents = fs.readFileSync(filePath, opts)
-            if @_diff
+            unless @_diff is 'none'
                 @_fileContents[filePath] = contents.split('\n')
             try
                 @_parse filePath, contents
@@ -64,8 +64,8 @@ class Inspector extends EventEmitter
             rules = @_hash[key]
             if rules?.length > 1
                 match = new Match(rules)
-                if @_diff
-                    match.generateDiffs @_fileContents
+                unless @_diff is 'none'
+                    match.generateDiffs @_fileContents, @_diff
                 @emit 'match', match
 
 

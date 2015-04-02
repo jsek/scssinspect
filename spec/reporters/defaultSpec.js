@@ -33,7 +33,7 @@ describe('DefaultReporter', function() {
       var file;
       file = fixtures.intersection;
       return helpers.safeTestOutput(Inspector, DefaultReporter, 'intersection', {
-        diff: false,
+        diff: 'none',
         ignoreSummary: true
       }, function(o) {
         return expect(o).to.be("\nMatch - 2 instances\n" + file + ":2,6\n" + file + ":10,14\n");
@@ -43,7 +43,7 @@ describe('DefaultReporter', function() {
       var file;
       file = fixtures.intersection;
       return helpers.safeTestOutput(Inspector, DefaultReporter, 'intersection', {
-        diff: true,
+        diff: 'lines',
         ignoreSummary: true
       }, function(o) {
         return expect(o).to.be("\nMatch - 2 instances\n" + file + ":2,6\n" + file + ":10,14\n\n- " + file + ":2,6\n+ " + file + ":10,14\n    .sub-selector1, .sub-selector2 {\n        border: 2px solid red;\n        color: blue;\n        z-index: 11;\n    }\n");

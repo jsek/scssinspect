@@ -26,7 +26,7 @@ describe 'DefaultReporter', ->
             
         it 'prints the number of instances, and their location', ->
             file = fixtures.intersection
-            helpers.safeTestOutput Inspector, DefaultReporter, 'intersection', {diff: false, ignoreSummary: true}, (o) ->
+            helpers.safeTestOutput Inspector, DefaultReporter, 'intersection', {diff: 'none', ignoreSummary: true}, (o) ->
                 expect(o).to.be """
 
                 Match - 2 instances
@@ -37,7 +37,7 @@ describe 'DefaultReporter', ->
 
         it 'prints the diffs if enabled', ->
             file = fixtures.intersection
-            helpers.safeTestOutput Inspector, DefaultReporter, 'intersection', {diff: true, ignoreSummary: true}, (o) ->
+            helpers.safeTestOutput Inspector, DefaultReporter, 'intersection', {diff: 'lines', ignoreSummary: true}, (o) ->
                 expect(o).to.be """
 
                 Match - 2 instances

@@ -32,7 +32,7 @@ describe('Inspector', function() {
     return it('accepts an options object', function() {
       var inspector, opts;
       opts = {
-        diff: false
+        diff: 'none'
       };
       inspector = new Inspector([], opts);
       return expect(inspector._diff).to.be(opts.diff);
@@ -91,10 +91,12 @@ describe('Inspector', function() {
     });
   });
   return it('includes a diff with the match, if enabled', function() {
-    var inspector, match;
-    inspector = new Inspector([fixtures['intersection-diff']], {
-      diff: true
-    });
+    var inspector, match, opts;
+    opts = {
+      threshold: 0,
+      diff: 'lines'
+    };
+    inspector = new Inspector([fixtures['intersection-diff']], opts);
     inspector.on('match', listener);
     inspector.run();
     expect(found).to.have.length(1);

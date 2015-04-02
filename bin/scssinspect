@@ -22,8 +22,7 @@ program
   .option('-c, --config'                , 'path to config file (default: .scssinspectrc)')
   .option('-s, --skip'                  , 'skip files with parsing errors')
   .option('-r, --reporter <name>'       , 'specify the reporter to use (you can also set custom path to *.js file)')
-//  .option('-s, --suppress <number>'     , 'length to suppress diffs (default: 100, off: 0)', parseInt)
-  .option('-D, --no-diff'               , 'disable 2-way diffs')
+  .option('--diff [css|lines|none]'     , 'type of diff to use (default: lines)')
   .option('-C, --no-color'              , 'disable colors')
   .option('--ignore <pattern>'          , 'ignore paths matching a regex')
   .parse(process.argv);
@@ -81,6 +80,9 @@ if (!paths.length) {
     process.exit(0);
 }
 
+// Set default diff type
+program.diff = program.diff || 'lines';
+
 var inspector = new Inspector(paths, {
     threshold       : program.threshold,
     diff            : program.diff,
@@ -97,8 +99,7 @@ if (/[\\\/]/g.test(program.reporter)) {
     reporterType = reporters[program.reporter] || reporters.default;
 }
 new reporterType(inspector, {
-    diff        : program.diff,
-    suppress    : program.suppress
+    diff        : program.diff
 });
 
 // Track the number of matches
