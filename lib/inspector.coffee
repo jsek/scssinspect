@@ -10,7 +10,7 @@ astToCSS     = require('./css').astToCSS
 class Inspector extends EventEmitter
 
     constructor: (@_filePaths = [], opts = {}) ->
-        @_threshold     = opts.threshold or 15
+        @_threshold     = if opts.threshold == 0 then 0 else opts.threshold or 50
         @_ignoreValues  = opts['ignore-values']
         @_diff          = opts.diff
         @_skip          = opts.skip
@@ -78,10 +78,13 @@ class Inspector extends EventEmitter
 
     _insert: (rule) ->
         key = @_getHashKey(rule)
-        unless @_hash[key]
-            @_hash[key] = []
-        # Assign the parent node to the key
-        @_hash[key].push rule
+
+        if key.length > @_threshold # temporarly
+
+            unless @_hash[key]
+                @_hash[key] = []
+            # Assign the parent node to the key
+            @_hash[key].push rule
 
 
     _getHashKey: (ruleset) -> 

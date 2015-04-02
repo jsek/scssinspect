@@ -16,7 +16,7 @@ var summary = '  Duplicate code and structure detection for Scss.\n' +
 program
   .version(require('../package.json').version)
   .usage('[options] <paths ...>\n\n' + summary)
-//  .option('-t, --threshold <number>'    , 'number of nodes (default: 15)', parseInt)
+  .option('-t, --threshold <number>'    , 'minimal length of duplicated text (default: 50)', parseInt)
 //  .option('-i, --ignore-values'         , 'don\'t match exact numeric/color values')
   .option('--syntax'                    , 'print syntax trees only')
   .option('-c, --config'                , 'path to config file (default: .scssinspectrc)')
@@ -43,7 +43,7 @@ if (fs.existsSync(rcPath) && fs.lstatSync(rcPath).isFile()) {
         process.exit(1);
     }
 
-  ['diff', 'ignore', 'reporter', 'skip']
+  ['diff', 'ignore', 'reporter', 'skip', 'threshold']
       .forEach(function (option) {
         if (program[option] === undefined && (option in rc)) {
             program[option] = rc[option];

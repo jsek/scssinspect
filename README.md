@@ -43,6 +43,7 @@ Options:
 
   -h, --help                         output usage information
   -V, --version                      output the version number
+  -t, --threshold <number>           minimal length of duplicated text (default: 50)
       --syntax                       print syntax trees only
   -c, --config                       path to config file (default: .scssinspectrc)
   -r, --reporter <name>              specify the reporter to use (you can also set custom path to *.js file)
@@ -57,6 +58,7 @@ be used in place of the defaults listed above. For example:
 
 ``` javascript
 {
+  "threshold"     : 100,
   "diff"          : "true",
   "reporter"      : "html",
   "skip"          : "false",
