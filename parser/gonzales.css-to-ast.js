@@ -2538,6 +2538,7 @@ syntaxes.css = {
     scss.checkStylesheet = function(i) {
         var start = i,
             l;
+        if (tokens[i].value.charCodeAt(0) > 60000) start = ++i; // specyfic bugs in my project
         while (i < tokensLength) {
             if (l = this.checkSC(i) ||
                 this.checkDeclaration(i) ||
@@ -2555,6 +2556,7 @@ syntaxes.css = {
     scss.getStylesheet = function() {
         var startPos = pos,
             x = [NodeType.StylesheetType];
+        if (tokens[pos].value.charCodeAt(0) > 60000) startPos = ++pos; // specyfic bugs in my project
         while (pos < tokensLength) {
             if (this.checkSC(pos)) x = x.concat(this.getSC());
             else if (this.checkRuleset(pos)) x.push(this.getRuleset());
