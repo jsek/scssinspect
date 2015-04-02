@@ -66,5 +66,5 @@ be used in place of the defaults listed above. For example:
 
 ## Known issues
         
- - Parser issues:
-    - Sometimes parsing base64 values is causing exception
+ - CLI issues
+    - local installation throws exception

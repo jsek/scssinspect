@@ -67,7 +67,7 @@ describe('Parser', function() {
   it('should parse variables assignment without exception', function() {
     return expectNoParsingErrors('variables');
   });
-  return xit('should parse base64 values without exception', function() {
+  return it('should parse base64 values without exception', function() {
     return expectNoParsingErrors('base64');
   });
 });

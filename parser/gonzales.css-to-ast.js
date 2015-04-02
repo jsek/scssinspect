@@ -93,6 +93,7 @@ var NodeType = {
     AtrulesType: 'atrules',
     AttribType: 'attrib',
     AttrselectorType: 'attrselector',
+    Base64Type: 'base64',
     BlockType: 'block',
     BracesType: 'braces',
     CdcType: 'cdc',
@@ -194,6 +195,14 @@ var getTokens = (function() {
     function isDecimalDigit(c) {
         return '0123456789'.indexOf(c) >= 0;
     }
+    function parseBase64(css) {
+        var start = pos;
+        for (; pos < css.length; pos++) {
+            if (css.charAt(pos) === ')') break; // naive implementation (good enough for now)
+        }
+        pushToken(TokenType.base64, css.substring(start, pos));
+        pos--;
+    }
     function parseSpaces(css) {
         var start = pos;
         for (; pos < css.length; pos++) {
@@ -272,6 +281,9 @@ var getTokens = (function() {
             else if (isDecimalDigit(c)) {
                 parseDecimalNumber(css);
             }
+            else if (c === 'd' && cn === 'a' && css.slice(pos,pos+5) === 'data:') {
+                parseBase64(css, c);
+            }
             else {
                 parseIdentifier(css);
             }
@@ -292,6 +304,7 @@ var rules = {
     'atrules': function() { if (s.checkAtrules(pos)) return s.getAtrules() },
     'attrib': function() { if (s.checkAttrib(pos)) return s.getAttrib() },
     'attrselector': function() { if (s.checkAttrselector(pos)) return s.getAttrselector() },
+    'base64': function() { if (s.checkBase64(pos)) return s.getBase64() },
     'block': function() { if (s.checkBlock(pos)) return s.getBlock() },
     'braces': function() { if (s.checkBraces(pos)) return s.getBraces() },
     'class': function() { if (s.checkClass(pos)) return s.getClass() },
@@ -580,6 +593,31 @@ syntaxes.css = {
         x = [NodeType.AtrulesType, this.getAtkeyword()].concat(this.getTsets());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     },
+    checkBase64: function(i) {
+        var start = i,
+            l;
+        if (i >= tokensLength) return 0;
+        if (l = this.checkSC(i)) i += l;
+        if (tokens[i].type !== TokenType.base64) return 0;
+        i++;
+        if (l = this.checkSC(i)) i += l;
+        return i - start;
+    },
+    getBase64: function() {
+        var startPos = pos,
+            x = [],
+            b;
+        x.push(this.getSC());
+        b = [NodeType.Base64Type, tokens[pos].value];
+        if (needInfo) {
+            b.unshift(getInfo(pos-1));
+        }
+        x.push(b);
+        pos++;
+        x.push(this.getSC());
+
+        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+    },
     checkBlock: function(i) {
         return i < tokensLength && tokens[i].type === TokenType.LeftCurlyBracket ?
             tokens[i].right - i + 1 : 0;
@@ -653,7 +691,7 @@ syntaxes.css = {
             l;
         if (l = this.checkSC(i)) i += l;
         if (l = this.checkMediaQuery(i)) tokens[i].bd_kind = 1;
-        if (l = this.checkFilter(i)) tokens[i].bd_kind = 2;
+        else if (l = this.checkFilter(i)) tokens[i].bd_kind = 2;
         else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 3;
         else if (l = this.checkAtrule(i)) tokens[i].bd_kind = 4;
         else return 0;
@@ -1563,7 +1601,12 @@ syntaxes.css = {
         uriExcluding[TokenType.Newline] = 1;
         uriExcluding[TokenType.LeftParenthesis] = 1;
         uriExcluding[TokenType.RightParenthesis] = 1;
-        if (this.checkUri1(pos)) {
+        uri = [NodeType.UriType];
+
+        if (this.checkBase64(pos)) {
+            uri = uri.concat(this.getBase64());
+            pos++;
+        } else if (this.checkUri1(pos)) {
             uri = [NodeType.UriType]
                 .concat(this.getSC())
                 .concat([this.getString()])
@@ -2537,19 +2580,22 @@ syntaxes.css = {
         uriExcluding[TokenType.Newline] = 1;
         uriExcluding[TokenType.LeftParenthesis] = 1;
         uriExcluding[TokenType.RightParenthesis] = 1;
-        
+        uri = [NodeType.UriType];
+
         if (this.checkArgument(pos)) {
-            uri = [NodeType.UriType]
-                .concat(this.getArgument());
+            uri = uri.concat(this.getArgument());
+            pos++;
+        } else if (this.checkBase64(pos)) {
+            uri = uri.concat(this.getBase64());
             pos++;
         } else if (this.checkUri1(pos)) {
-            uri = [NodeType.UriType]
+            uri = uri
                 .concat(this.getSC())
                 .concat([this.getString()])
                 .concat(this.getSC());
             pos++;
         } else {
-            uri = [NodeType.UriType].concat(this.getSC()),
+            uri = uri.concat(this.getSC()),
             l = checkExcluding(uriExcluding, pos),
             raw = [NodeType.RawType, joinValues(pos, pos + l)];
             if (needInfo) raw.unshift(getInfo(startPos));

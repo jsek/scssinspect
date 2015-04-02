@@ -60,5 +60,5 @@ describe 'Parser', ->
     it 'should parse variables assignment without exception', ->
         expectNoParsingErrors 'variables'
 
-    xit 'should parse base64 values without exception', ->
+    it 'should parse base64 values without exception', ->
         expectNoParsingErrors 'base64'
