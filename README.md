@@ -12,7 +12,6 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 * [Overview](#overview)
 * [Installation](#installation)
 * [Usage](#usage)
-* [Known issues](#known-issues)
 
 ## Overview
 
@@ -65,8 +64,3 @@ be used in place of the defaults listed above. For example:
   "ignore"        : "bootstrap|legacy|lib" // used as RegExp
 }
 ```
-
-## Known issues
-        
- - CLI issues
-    - local installation throws exception

@@ -4,8 +4,8 @@ var fs        = require('fs');
 var path      = require('path');
 var strip     = require('strip-json-comments');
 var chalk     = require('chalk');
-var filepaths = require('node-filepaths');
 var program   = require('commander');
+var filepaths = require('../lib/filepaths');
 var Inspector = require('../lib/inspector');
 var reporters = require('../lib/reporters');
 
@@ -18,13 +18,13 @@ program
   .usage('[options] <paths ...>\n\n' + summary)
   .option('-t, --threshold <number>'    , 'minimal length of duplicated text (default: 50)', parseInt)
 //  .option('-i, --ignore-values'         , 'don\'t match exact numeric/color values')
-  .option('--syntax'                    , 'print syntax trees only')
+  .option('    --syntax'                , 'print syntax trees only')
   .option('-c, --config'                , 'path to config file (default: .scssinspectrc)')
   .option('-s, --skip'                  , 'skip files with parsing errors')
   .option('-r, --reporter <name>'       , 'specify the reporter to use (you can also set custom path to *.js file)')
-  .option('--diff [css|lines|none]'     , 'type of diff to use (default: lines)')
+  .option('    --diff [css|lines|none]' , 'type of diff to use (default: lines)')
   .option('-C, --no-color'              , 'disable colors')
-  .option('--ignore <pattern>'          , 'ignore paths matching a regex')
+  .option('    --ignore <pattern>'      , 'ignore paths matching a regex')
   .parse(process.argv);
 
 // Check and parse the config file, if it exists
@@ -63,7 +63,6 @@ var ignorePatterns = ['node_modules'];
 if (program.ignore) {
     ignorePatterns.push(program.ignore);
 }
-
 var paths;
 try {
     paths = filepaths.getSync(suppliedPaths, {
@@ -95,6 +94,8 @@ var inspector = new Inspector(paths, {
 var reporterType;
 if (/[\\\/]/g.test(program.reporter)) {
     reporterType = require(process.cwd() + program.reporter.replace(/^.\\/,'\\'));
+} else if (/(^[\/])|(^[A-Za-z]:)/g.test(program.reporter)) {
+    reporterType = require(program.reporter);
 } else {
     reporterType = reporters[program.reporter] || reporters.default;
 }
