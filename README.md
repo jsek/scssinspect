@@ -14,6 +14,7 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 * [Usage](#usage)
 * [Integration](#integration)
 * [Reporters](#reporters)
+* [Known issues](#known-issues)
 
 ## Overview
 
@@ -140,3 +141,8 @@ HTML reporter is well suited for CI usage. (Note that example below got indentat
 </html>
 ```
 
+## Known issues
+
+Scssinspect is dependent on Gonzales-PE parser which sometimes cannot parse scss 
+libraries (like bootstrap). It is recommended to ignore these files or directories 
+using `--ignore` flag or `ignore` property in .scssinspectrc. 
