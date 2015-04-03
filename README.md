@@ -12,6 +12,8 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 * [Overview](#overview)
 * [Installation](#installation)
 * [Usage](#usage)
+* [Integration](#integration)
+* [Reporters](#reporters)
 
 ## Overview
 
@@ -64,3 +66,77 @@ be used in place of the defaults listed above. For example:
   "ignore"        : "bootstrap|legacy|lib" // used as RegExp
 }
 ```
+
+## Integration
+
+Example for Travis CI. Expected Entries in your `.travis.yml`:
+
+``` yaml
+before_script:
+  - "npm install -g scssinspect"
+
+script:
+  - "scssinspect -t 30 ./path/to/src"
+```
+
+If you wish to log results as HTML and not break the build, use following example:
+
+``` yaml
+script:
+  - "scssinspect -t 30 ./path/to/src" > logs/scssinspect.html || true
+```
+
+## Reporters
+
+### Default
+
+Default reporter is well suited for CLI usage. 
+
+```
+Match - 2 instances
+.\demo\a.scss:2,2
+.\demo\b.scss:2,5
+
+- .\demo\a.scss:2,2
++ .\demo\b.scss:2,5
++   div {
++       border: none;
++       color: red;
++   }
+-   div { color: red; border: none; }
+
+ 1 match found across 2 files
+```
+
+### HTML
+
+HTML reporter is well suited for CI usage. (Note that example below got indentation and formatting)
+
+```html
+<!doctype html>
+<html>
+    <head>
+        <style><!-- styles --></style>
+        <title><!-- current date --></title>
+    </head>
+    <body>
+        <header>Match - 2 instances</header>
+        <h3>demo\a.scss:3,3</h3>
+        <h3>demo\b.scss:6,8</h3>
+        <pre class='diff'>
+            <code class='diff-files'>
+            - .\demo\a.scss:3,3
+            + .\demo\b.scss:6,8
+            </code>
+            <code class='line-added'>+   .b, .a {                </code>
+            <code class='line-added'>+       color: #fff;        </code>
+            <code class='line-added'>+   }                       </code>
+            <code class='line-removed'>-   .a,.b { color: #fff; }</code>
+        </pre>
+        <footer>
+            <span class='failure'>1 match found across 2 files</span>
+        </footer>
+    </body>
+</html>
+```
+
