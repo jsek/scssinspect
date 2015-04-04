@@ -79,20 +79,19 @@ class Inspector extends EventEmitter
     _insert: (rule) ->
         key = @_getHashKey(rule)
 
-        if @_doesExceedThreshold key
+        if @_doesExceedThreshold key, rule
             @_hash[key] = []  unless @_hash[key]
             @_hash[key].push rule
 
 
-    _doesExceedThreshold: (hash) ->
+    _doesExceedThreshold: (hash, syntaxTree) ->
         if @_thresholdType is 'char'
             hash.length >= @_threshold
         else if @_thresholdType is 'token'
             tokensLength = parse(css: hash, syntax: 'scss', needInfo: true, sizeOnly: true)
             tokensLength >= @_threshold
         else if @_thresholdType is 'property'
-            syntaxTree = parse(css: hash, syntax: 'scss')
-            propertiesLength = JSON.stringify(syntaxTree).match(/"declaration",\["property"/g)?.length
+            propertiesLength = JSON.stringify(syntaxTree).match(/"declaration",\[\{[^\}]+\},"property"/g)?.length
             propertiesLength >= @_threshold
         else 
             throw new Error('Unknown type of element to apply threshold')
