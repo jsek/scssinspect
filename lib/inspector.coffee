@@ -88,14 +88,14 @@ class Inspector extends EventEmitter
 
     _doesExceedThreshold: (hash) ->
         if @_thresholdType is 'char'
-            hash.length > @_threshold
+            hash.length >= @_threshold
         else if @_thresholdType is 'token'
             tokensLength = parse(css: hash, syntax: 'scss', needInfo: true, sizeOnly: true)
-            tokensLength > @_threshold
+            tokensLength >= @_threshold
         else if @_thresholdType is 'property'
             syntaxTree = parse(css: hash, syntax: 'scss')
             propertiesLength = JSON.stringify(syntaxTree).match(/"declaration",\["property"/g)?.length
-            propertiesLength > @_threshold
+            propertiesLength >= @_threshold
         else 
             throw new Error('Unknown type of element to apply threshold')
 
