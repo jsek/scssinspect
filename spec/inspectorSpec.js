@@ -11,7 +11,7 @@ Match = require('../lib/match.js');
 fixtures = require('./fixtures');
 
 describe('Inspector', function() {
-  var found, listener;
+  var expectMatchCount, found, listener;
   found = void 0;
   listener = function(match) {
     return found.push(match);
@@ -19,6 +19,13 @@ describe('Inspector', function() {
   beforeEach(function() {
     return found = [];
   });
+  expectMatchCount = function(fixture, opts, count) {
+    var inspector;
+    inspector = new Inspector([fixture], opts);
+    inspector.on('match', listener);
+    inspector.run();
+    return expect(found).to.have.length(count);
+  };
   describe('constructor', function() {
     it('inherits from EventEmitter', function() {
       return expect(new Inspector).to.be.an(EventEmitter);
@@ -107,50 +114,56 @@ describe('Inspector', function() {
   });
   describe('threshold (characters)', function() {
     it('matches rules if threshold is lower than rule size', function() {
-      var inspector, opts;
+      var opts;
       opts = {
         threshold: 70,
         thresholdType: 'char'
       };
-      inspector = new Inspector([fixtures['intersection']], opts);
-      inspector.on('match', listener);
-      inspector.run();
-      return expect(found).to.have.length(1);
+      return expectMatchCount(fixtures.intersection, opts, 1);
     });
     return it('does not match rules that exceed threshold', function() {
-      var inspector, opts;
+      var opts;
       opts = {
         threshold: 80,
         thresholdType: 'char'
       };
-      inspector = new Inspector([fixtures['intersection']], opts);
-      inspector.on('match', listener);
-      inspector.run();
-      return expect(found).to.have.length(0);
+      return expectMatchCount(fixtures.intersection, opts, 0);
     });
   });
-  return describe('threshold (tokens)', function() {
+  describe('threshold (tokens)', function() {
     it('matches rules if threshold is lower than rule size', function() {
-      var inspector, opts;
+      var opts;
       opts = {
         threshold: 30,
         thresholdType: 'token'
       };
-      inspector = new Inspector([fixtures['intersection']], opts);
-      inspector.on('match', listener);
-      inspector.run();
-      return expect(found).to.have.length(1);
+      return expectMatchCount(fixtures.intersection, opts, 1);
     });
     return it('does not match rules that exceed threshold', function() {
-      var inspector, opts;
+      var opts;
       opts = {
         threshold: 40,
         thresholdType: 'token'
       };
-      inspector = new Inspector([fixtures['intersection']], opts);
-      inspector.on('match', listener);
-      inspector.run();
-      return expect(found).to.have.length(0);
+      return expectMatchCount(fixtures.intersection, opts, 0);
+    });
+  });
+  return describe('threshold (properties)', function() {
+    it('matches rules if threshold is lower than rule size', function() {
+      var opts;
+      opts = {
+        threshold: 2,
+        thresholdType: 'property'
+      };
+      return expectMatchCount(fixtures.intersection, opts, 1);
+    });
+    return it('does not match rules that exceed threshold', function() {
+      var opts;
+      opts = {
+        threshold: 5,
+        thresholdType: 'property'
+      };
+      return expectMatchCount(fixtures.intersection, opts, 0);
     });
   });
 });

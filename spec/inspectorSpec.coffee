@@ -13,6 +13,11 @@ describe 'Inspector', ->
 
     beforeEach -> found = []
 
+    expectMatchCount = (fixture, opts, count) ->
+        inspector = new Inspector([ fixture ], opts)
+        inspector.on 'match', listener
+        inspector.run()
+        expect(found).to.have.length count
     
     describe 'constructor', ->
 
@@ -99,21 +104,13 @@ describe 'Inspector', ->
             opts =
                 threshold: 70
                 thresholdType: 'char'
-            inspector = new Inspector([ fixtures['intersection'] ], opts)
-            inspector.on 'match', listener
-            inspector.run()
-            
-            expect(found).to.have.length 1
+            expectMatchCount fixtures.intersection, opts, 1
         
         it 'does not match rules that exceed threshold', ->
             opts =
                 threshold: 80
                 thresholdType: 'char'
-            inspector = new Inspector([ fixtures['intersection'] ], opts)
-            inspector.on 'match', listener
-            inspector.run()
-            
-            expect(found).to.have.length 0
+            expectMatchCount fixtures.intersection, opts, 0
             
             
     describe 'threshold (tokens)', ->
@@ -122,18 +119,25 @@ describe 'Inspector', ->
             opts =
                 threshold: 30
                 thresholdType: 'token'
-            inspector = new Inspector([ fixtures['intersection'] ], opts)
-            inspector.on 'match', listener
-            inspector.run()
-            
-            expect(found).to.have.length 1
+            expectMatchCount fixtures.intersection, opts, 1
         
         it 'does not match rules that exceed threshold', ->
             opts =
                 threshold: 40
                 thresholdType: 'token'
-            inspector = new Inspector([ fixtures['intersection'] ], opts)
-            inspector.on 'match', listener
-            inspector.run()
+            expectMatchCount fixtures.intersection, opts, 0
             
-            expect(found).to.have.length 0
+
+    describe 'threshold (properties)', ->
+            
+        it 'matches rules if threshold is lower than rule size', ->
+            opts =
+                threshold: 2
+                thresholdType: 'property'
+            expectMatchCount fixtures.intersection, opts, 1
+        
+        it 'does not match rules that exceed threshold', ->
+            opts =
+                threshold: 5
+                thresholdType: 'property'
+            expectMatchCount fixtures.intersection, opts, 0
