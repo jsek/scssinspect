@@ -105,6 +105,4 @@ class Inspector extends EventEmitter
             end  : {line: ruleset[0].end?.ln}
         return structure
 
-chalk = require 'chalk'
-__log = (x) -> console.log chalk.cyan x
 module.exports = Inspector
