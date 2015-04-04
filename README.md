@@ -62,9 +62,10 @@ be used in place of the defaults listed above. For example:
 ``` javascript
 {
   "threshold"     : 100,
+  "type"          : "token",
   "diff"          : "css",
   "reporter"      : "html",
-  "skip"          : "false",
+  "skip"          : false,
   "ignore"        : "bootstrap|legacy|lib" // used as RegExp
 }
 ```

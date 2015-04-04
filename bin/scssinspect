@@ -83,8 +83,6 @@ if (!paths.length) {
 // Set defaults
 program.diff = program.diff || 'lines';
 
-console.log(program.type);
-
 var inspector = new Inspector(paths, {
     threshold       : program.threshold,
     thresholdType   : program.type,
