@@ -11,7 +11,8 @@ class Inspector extends EventEmitter
 
     constructor: (@_filePaths = [], opts = {}) ->
         @_threshold     = if opts.threshold == 0 then 0 else opts.threshold or 50
-        @_ignoreValues  = opts['ignore-values']
+        @_thresholdType = opts.thresholdType || 'char'
+        @_ignoreValues  = opts.ignoreValues
         @_diff          = opts.diff
         @_skip          = opts.skip
         @_syntax        = opts.syntax
@@ -19,7 +20,6 @@ class Inspector extends EventEmitter
         @numFiles       = @_filePaths.length
         unless @_diff is 'none'
             @_fileContents = {}
-
 
     run: ->
         opts = encoding: 'utf8'
@@ -79,12 +79,21 @@ class Inspector extends EventEmitter
     _insert: (rule) ->
         key = @_getHashKey(rule)
 
-        if key.length > @_threshold # temporarly
-
+        if @_doesExceedThreshold key
             unless @_hash[key]
                 @_hash[key] = []
             # Assign the parent node to the key
             @_hash[key].push rule
+
+
+    _doesExceedThreshold: (hash) ->
+        if @_thresholdType is 'char'
+            hash.length > @_threshold
+        else if @_thresholdType is 'token'
+            tokensLength = parse(css: hash, syntax: 'scss', needInfo: true, sizeOnly: true)
+            tokensLength > @_threshold
+        else 
+            throw new Error('Unknown type of element to apply threshold')
 
 
     _getHashKey: (ruleset) -> 
@@ -96,5 +105,6 @@ class Inspector extends EventEmitter
             end  : {line: ruleset[0].end?.ln}
         return structure
 
-
+chalk = require 'chalk'
+__log = (x) -> console.log chalk.cyan x
 module.exports = Inspector

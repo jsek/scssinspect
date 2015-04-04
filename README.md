@@ -46,6 +46,7 @@ Options:
   -h, --help                         output usage information
   -V, --version                      output the version number
   -t, --threshold <number>           minimal length of duplicated text (default: 50)
+  -y, --type [char|token]            type of element to apply threshold (default: char)
       --syntax                       print syntax trees only
   -c, --config                       path to config file (default: .scssinspectrc)
   -r, --reporter <name>              specify the reporter to use (you can also set custom path to *.js file)

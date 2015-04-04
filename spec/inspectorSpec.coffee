@@ -91,3 +91,49 @@ describe 'Inspector', ->
         expect(match.nodes).to.have.length 2
         expect(match.diffs).to.have.length 1
         expect(match.diffs[0]).to.have.length 5
+        
+    
+    describe 'threshold (characters)', ->
+    
+        it 'matches rules if threshold is lower than rule size', ->
+            opts =
+                threshold: 70
+                thresholdType: 'char'
+            inspector = new Inspector([ fixtures['intersection'] ], opts)
+            inspector.on 'match', listener
+            inspector.run()
+            
+            expect(found).to.have.length 1
+        
+        it 'does not match rules that exceed threshold', ->
+            opts =
+                threshold: 80
+                thresholdType: 'char'
+            inspector = new Inspector([ fixtures['intersection'] ], opts)
+            inspector.on 'match', listener
+            inspector.run()
+            
+            expect(found).to.have.length 0
+            
+            
+    describe 'threshold (tokens)', ->
+            
+        it 'matches rules if threshold is lower than rule size', ->
+            opts =
+                threshold: 30
+                thresholdType: 'token'
+            inspector = new Inspector([ fixtures['intersection'] ], opts)
+            inspector.on 'match', listener
+            inspector.run()
+            
+            expect(found).to.have.length 1
+        
+        it 'does not match rules that exceed threshold', ->
+            opts =
+                threshold: 40
+                thresholdType: 'token'
+            inspector = new Inspector([ fixtures['intersection'] ], opts)
+            inspector.on 'match', listener
+            inspector.run()
+            
+            expect(found).to.have.length 0

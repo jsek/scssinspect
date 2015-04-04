@@ -17,6 +17,7 @@ program
   .version(require('../package.json').version)
   .usage('[options] <paths ...>\n\n' + summary)
   .option('-t, --threshold <number>'    , 'minimal length of duplicated text (default: 50)', parseInt)
+  .option('-y, --type [char|token]'     , 'type of element to apply threshold (default: char)')
 //  .option('-i, --ignore-values'         , 'don\'t match exact numeric/color values')
   .option('    --syntax'                , 'print syntax trees only')
   .option('-c, --config'                , 'path to config file (default: .scssinspectrc)')
@@ -42,7 +43,7 @@ if (fs.existsSync(rcPath) && fs.lstatSync(rcPath).isFile()) {
         process.exit(1);
     }
 
-  ['diff', 'ignore', 'reporter', 'skip', 'threshold']
+  ['diff', 'ignore', 'reporter', 'skip', 'threshold', 'type']
       .forEach(function (option) {
         if (program[option] === undefined && (option in rc)) {
             program[option] = rc[option];
@@ -79,15 +80,18 @@ if (!paths.length) {
     process.exit(0);
 }
 
-// Set default diff type
+// Set defaults
 program.diff = program.diff || 'lines';
+
+console.log(program.type);
 
 var inspector = new Inspector(paths, {
     threshold       : program.threshold,
+    thresholdType   : program.type,
     diff            : program.diff,
     skip            : program.skip,
     syntax          : program.syntax,
-    'ignore-values' : program['ignore-values']
+    ignoreValues    : program['ignore-values']
 });
 
 // Retrieve the requested reporter

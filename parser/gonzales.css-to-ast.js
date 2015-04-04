@@ -4046,11 +4046,16 @@ syntaxes.css = {
         s = syntaxes[syntax];
         getTokens(css, syntax);
         tokensLength = tokens.length;
-        pos = 0;
-        s.markBrackets();
-        s.markSC();
-        s.markBlocks && s.markBlocks();
-        return rules[rule]();
+
+        if (options.sizeOnly) {
+            return tokensLength;
+        } else {
+            pos = 0;
+            s.markBrackets();
+            s.markSC();
+            s.markBlocks && s.markBlocks();
+            return rules[rule]();   
+        }
     }
 }());
 exports.cssToAST = cssToAST;
