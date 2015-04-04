@@ -39,9 +39,11 @@ describe('Inspector', function() {
     return it('accepts an options object', function() {
       var inspector, opts;
       opts = {
-        diff: 'none'
+        diff: 'none',
+        threshold: 151
       };
       inspector = new Inspector([], opts);
+      expect(inspector._threshold).to.be(opts.threshold);
       return expect(inspector._diff).to.be(opts.diff);
     });
   });

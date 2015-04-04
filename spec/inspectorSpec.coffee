@@ -35,9 +35,10 @@ describe 'Inspector', ->
         it 'accepts an options object', ->
             opts = 
                 diff: 'none'
+                threshold: 151
                 
             inspector = new Inspector([], opts)
-#            expect(inspector._threshold).to.be opts.threshold
+            expect(inspector._threshold).to.be opts.threshold
             expect(inspector._diff).to.be opts.diff
             
             

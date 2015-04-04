@@ -80,9 +80,7 @@ class Inspector extends EventEmitter
         key = @_getHashKey(rule)
 
         if @_doesExceedThreshold key
-            unless @_hash[key]
-                @_hash[key] = []
-            # Assign the parent node to the key
+            @_hash[key] = []  unless @_hash[key]
             @_hash[key].push rule
 
 
