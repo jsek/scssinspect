@@ -49,6 +49,7 @@ astToCSS = (options) ->
         'filterv'       : 1
         'include'       : 1
         'loop'          : 1
+        'mediaquery'    : 1
         'mixin'         : 1
         'simpleselector': 1
         'progid'        : 1

@@ -1,0 +1,23 @@
+@media (only screen) {
+    .c {
+        color: red;
+    }
+}
+
+
+.b {
+	@media (only print) {
+        .c {
+            color: blue;
+        }
+    }
+}
+
+
+.a {
+    @include for-size(#{$option}) {
+        .c {
+            color: green;
+        }
+    }
+}
