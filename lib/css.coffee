@@ -28,6 +28,7 @@ astToCSS = (options) ->
 
     _m_simple = 
         'attrselector'  : 1
+        'base64'        : 1
         'combinator'    : 1
         'ident'         : 1
         'nth'           : 1

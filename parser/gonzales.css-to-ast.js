@@ -607,16 +607,15 @@ syntaxes.css = {
         var startPos = pos,
             x = [],
             b;
-        x.push(this.getSC());
+        x = x.concat(this.getSC());
         b = [NodeType.Base64Type, tokens[pos].value];
         if (needInfo) {
             b.unshift(getInfo(pos-1));
         }
         x.push(b);
         pos++;
-        x.push(this.getSC());
-
-        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+        x = x.concat(this.getSC());
+        return x;
     },
     checkBlock: function(i) {
         return i < tokensLength && tokens[i].type === TokenType.LeftCurlyBracket ?
@@ -2586,7 +2585,7 @@ syntaxes.css = {
         uri = [NodeType.UriType];
 
         if (this.checkBase64(pos)) {
-            uri = uri.concat([this.getBase64()]);
+            uri = uri.concat(this.getBase64());
             pos++;
         } else if (this.checkUri1(pos)) {
             uri = uri
