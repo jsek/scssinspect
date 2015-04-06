@@ -70,7 +70,7 @@ class Inspector extends EventEmitter
 
 
     _walk: (syntaxTree, fn) ->
-        for ruleset in syntaxTree when ruleset[1] is 'ruleset'
+        for ruleset in syntaxTree when ruleset[1] in ['ruleset','mediaquery','include','mixin']
             fn ruleset
             for block in ruleset when block[1] is 'block'
                 @_walk block, fn
