@@ -1610,7 +1610,7 @@ syntaxes.css = {
                 .concat(this.getSC());
             pos++;
         } else if (this.checkArgument(pos)) {
-            uri.push(this.getArgument());
+            uri = uri.concat([this.getArgument()]);
             pos++;
         } else {
             uri = [NodeType.UriType].concat(this.getSC()),
@@ -2300,15 +2300,16 @@ syntaxes.css = {
         return tokens[i].type === TokenType.RightCurlyBracket ? i - start + 1 : 0;
     };
     scss.getInterpolatedExpression = function() {
-        var startPos = pos,
+        var startPos = pos, v,
             x = [NodeType.InterpolatedVariableType];
         pos += 2;
         while (tokens[pos].type !== TokenType.RightCurlyBracket)
         {
-            if (this.checkValue(pos)) this.getValue();
-            else if (this.checkVariable(pos)) this.getVariable();
-            else if (this.checkOperator(pos)) this.getOperator();
+            if (this.checkValue(pos)) v = this.getValue();
+            else if (this.checkVariable(pos)) v = this.getVariable();
+            else if (this.checkOperator(pos)) v = this.getOperator();
             else return 0;
+            x.push(v);
         }        
         pos++;
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
@@ -2585,7 +2586,7 @@ syntaxes.css = {
         uri = [NodeType.UriType];
 
         if (this.checkBase64(pos)) {
-            uri.push(this.getBase64());
+            uri = uri.concat([this.getBase64()]);
             pos++;
         } else if (this.checkUri1(pos)) {
             uri = uri
@@ -2594,7 +2595,7 @@ syntaxes.css = {
                 .concat(this.getSC());
             pos++;
         } else if (this.checkArgument(pos)) {
-            uri.push(this.getArgument());
+            uri = uri.concat([this.getArgument()]);
             pos++;
         } else  {
             uri = uri.concat(this.getSC()),
