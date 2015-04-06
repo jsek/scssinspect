@@ -1603,14 +1603,14 @@ syntaxes.css = {
         uriExcluding[TokenType.RightParenthesis] = 1;
         uri = [NodeType.UriType];
 
-        if (this.checkBase64(pos)) {
-            uri = uri.concat(this.getBase64());
-            pos++;
-        } else if (this.checkUri1(pos)) {
+        if (this.checkUri1(pos)) {
             uri = [NodeType.UriType]
                 .concat(this.getSC())
                 .concat([this.getString()])
                 .concat(this.getSC());
+            pos++;
+        } else if (this.checkArgument(pos)) {
+            uri.push(this.getArgument());
             pos++;
         } else {
             uri = [NodeType.UriType].concat(this.getSC()),
@@ -2584,11 +2584,8 @@ syntaxes.css = {
         uriExcluding[TokenType.RightParenthesis] = 1;
         uri = [NodeType.UriType];
 
-        if (this.checkArgument(pos)) {
-            uri = uri.concat(this.getArgument());
-            pos++;
-        } else if (this.checkBase64(pos)) {
-            uri = uri.concat(this.getBase64());
+        if (this.checkBase64(pos)) {
+            uri.push(this.getBase64());
             pos++;
         } else if (this.checkUri1(pos)) {
             uri = uri
@@ -2596,7 +2593,10 @@ syntaxes.css = {
                 .concat([this.getString()])
                 .concat(this.getSC());
             pos++;
-        } else {
+        } else if (this.checkArgument(pos)) {
+            uri.push(this.getArgument());
+            pos++;
+        } else  {
             uri = uri.concat(this.getSC()),
             l = checkExcluding(uriExcluding, pos),
             raw = [NodeType.RawType, joinValues(pos, pos + l)];
