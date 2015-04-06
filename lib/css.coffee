@@ -88,7 +88,7 @@ astToCSS = (options) ->
         'function'      : (t) -> _simple(t[index(1)]) + '(' + _composite(t[if hasInfo then 3 else 2]) + ')'
         'global'        : (t) -> '!' + _composite(t) + 'global'
         'important'     : (t) -> '!' + _composite(t) + 'important'
-        'interpolatedVariable': (t) -> (if syntax == 'less' then '@{' else '#{$') + _t(t[index(1)]) + '}'
+        'interpolatedVariable': (t) -> (if syntax == 'less' then '@{' else '#{') + _t(t[index(1)]) + '}'
         'nthselector'   : (t) -> ':' + _simple(t[index(1)]) + '(' + _composite(t, index(2)) + ')'
         'percentage'    : (t) -> _t(t[index(1)]) + '%'
         'placeholder'   : (t) -> '%' + _t(t[index(1)])
