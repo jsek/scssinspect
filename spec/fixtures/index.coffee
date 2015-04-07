@@ -10,6 +10,7 @@ fixtures        = [
     'indentation'
     'interpolation'
     'interpolation-calc'
+    'interpolation-expression-in-calc'
     'interpolation-functions'
     'intersection'
     'intersection-diff'
