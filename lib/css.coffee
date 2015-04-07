@@ -55,7 +55,6 @@ astToCSS = (options) ->
         'progid'        : 1
         'property'      : 1
         'ruleset'       : 1
-        'stylesheet'    : 1
         'value2'        : 1
         
     _m_primitive = 
@@ -96,6 +95,7 @@ astToCSS = (options) ->
         'pseudoc'       : (t) -> ':' + _t(t[index(1)])
         'pseudoe'       : (t) -> '::' + _t(t[index(1)])
         'shash'         : (t) -> '#' + t[index(1)]
+        'stylesheet'    : (t) -> _composite(t).replace(/[ ]+/g,' ')
         'uri'           : (t) -> 'url(' + _composite(t) + ')'
         'variable'      : (t) -> (if syntax == 'less' then '@' else '$') + _t(t[index(1)])
         'variableslist' : (t) -> _t(t[index(1)]) + '...'
