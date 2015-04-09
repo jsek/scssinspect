@@ -1903,8 +1903,9 @@ syntaxes.css = {
         else if (l = this.checkLoop(i)) tokens[i].bd_kind = 3;
         else if (l = this.checkFilter(i)) tokens[i].bd_kind = 4;
         else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 5;
-        else if (l = this.checkAtrule(i)) tokens[i].bd_kind = 6;
-        else if (l = this.checkRuleset(i)) tokens[i].bd_kind = 7;
+        else if (l = this.checkAtcontent(i)) tokens[i].bd_kind = 6;
+        else if (l = this.checkAtrule(i)) tokens[i].bd_kind = 7;
+        else if (l = this.checkRuleset(i)) tokens[i].bd_kind = 8;
         else return 0;
         i += l;
         if (i < tokensLength && (l = this.checkDeclDelim(i))) i += l;
@@ -1933,9 +1934,12 @@ syntaxes.css = {
                 x = this.getDeclaration();
                 break;
             case 6:
-                x = this.getAtrule();
+                x = this.getAtcontent();
                 break;
             case 7:
+                x = this.getAtrule();
+                break;
+            case 8:
                 x = this.getRuleset();
                 break;
         }

@@ -43,7 +43,7 @@ astToCSS = (options) ->
         'atruleb'       : 1
         'atrulerq'      : 1
         'atrulers'      : 1
-        'atrules'      : 1
+        'atrules'       : 1
         'condition'     : 1
         'dimension'     : 1
         'filterv'       : 1
@@ -69,6 +69,7 @@ astToCSS = (options) ->
 
     _unique = 
         'arguments'     : (t) -> '(' + _composite(t) + ')'
+        'atcontent'     : (t) -> '@content'
         'atkeyword'     : (t) -> '@' + _t(t[index(1)])
         'atruler'       : (t) -> _t(t[index(1)]) + _t(t[index(2)]) + '{' + _t(t[index(3)]) + '}'
         'attrib'        : (t) -> '[' + _composite(t) + ']'
