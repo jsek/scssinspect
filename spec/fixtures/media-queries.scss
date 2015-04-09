@@ -1,28 +1,27 @@
 @media (only screen) {
-    @if (&) {
-        & { @content; }
-    }
-    @else { @content; }
+	body > * > a { color: red; }
 }
-
 
 @mixin print {
 	@media (only print) {
-        @if (&) {
-		    & { @content; }
-        }
-        @else { @content; }
+	    @if (&) {
+	        & { 
+	        	@content; 
+	    	}
+	    }
+	    @else { 
+	    	@content; 
+	    }
     }
 }
-
 
 @mixin media-for-pc($option) {
     @media (#{$option}) {
         @if (&) {
-  		    body:not(.responsive) & { @content; }
+  		    body:not(.responsive) & { @content }
         }
         @else {
-  		    body:not(.responsive)   { @content; }
+  		    body:not(.responsive)   { @content }
         }
     }
 }
