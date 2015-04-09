@@ -2,6 +2,7 @@ util         = require('util')
 EventEmitter = require('events').EventEmitter
 parse        = require('../parser/gonzales').cssToAST
 fs           = require('fs')
+beautify     = require('js-beautify').js_beautify
 
 Match        = require('./match')
 astToCSS     = require('./css').astToCSS
@@ -48,12 +49,11 @@ class Inspector extends EventEmitter
 
 
     _parse: (filePath, contents) ->
-        syntaxTree = parse(css: contents, syntax: 'scss', needInfo: true)
-
         if @_syntax
-            console.log syntaxTree
-
+            syntaxTree = parse(css: contents, syntax: 'scss')
+            console.log beautify JSON.stringify syntaxTree
         else
+            syntaxTree = parse(css: contents, syntax: 'scss', needInfo: true)
             @_walk syntaxTree, (rule) =>
                 @_insert rule
                 rule.loc.source = filePath
