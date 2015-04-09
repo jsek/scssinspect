@@ -31,7 +31,7 @@ describe 'Printer', ->
     it 'should print functions inside interpolation', ->
         expectPrinterOutput 'interpolation-functions'
 
-    it 'should print media-queries', ->
+    xit 'should print media-queries', ->
         expectPrinterOutput 'media-queries'
 
     it 'should print negative values', ->
