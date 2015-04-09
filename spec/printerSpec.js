@@ -47,10 +47,10 @@ describe('Printer', function() {
   it('should print functions inside interpolation', function() {
     return expectPrinterOutput('interpolation-functions');
   });
-  xit('should print media-queries', function() {
+  it('should print media-queries', function() {
     return expectPrinterOutput('media-queries');
   });
-  xit('should print negative values', function() {
+  it('should print negative values', function() {
     return expectPrinterOutput('negative-values');
   });
   it('should print nested functions', function() {
