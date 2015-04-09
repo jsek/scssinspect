@@ -28,7 +28,7 @@ describe 'Printer', ->
     it 'should print interpolation in calc with longer interpolated expression', ->
         expectPrinterOutput 'interpolation-expression-in-calc'
 
-    xit 'should print functions inside interpolation', ->
+    it 'should print functions inside interpolation', ->
         expectPrinterOutput 'interpolation-functions'
 
     xit 'should print media-queries', ->
@@ -40,10 +40,10 @@ describe 'Printer', ->
     it 'should print nested functions', ->
         expectPrinterOutput 'nested-functions'
             
-    xit 'should print expressions inside url()', ->
+    it 'should print expressions inside url()', ->
         expectPrinterOutput 'expression-in-url'
             
-    xit 'should print variables assignments', ->
+    it 'should print variables assignments', ->
         expectPrinterOutput 'variables'
 
     it 'should print base64 values', ->

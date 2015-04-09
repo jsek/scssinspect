@@ -6,7 +6,6 @@ astToCSS = (options) ->
             if t in Object.keys(_m_primitive)        then return _m_primitive[t]
             else if t in Object.keys(_m_simple)      then return _simple(tree)
             else if t in Object.keys(_m_composite)   then return _composite(tree)
-            else if t in Object.keys(_m_delimited)   then return _composite(tree) + ';'
             else if t in _suppressed                 then return ''
             else                                          return _unique[t](tree)
         catch e
@@ -44,6 +43,7 @@ astToCSS = (options) ->
         'atruleb'       : 1
         'atrulerq'      : 1
         'atrulers'      : 1
+        'atrules'      : 1
         'condition'     : 1
         'dimension'     : 1
         'filterv'       : 1
@@ -57,13 +57,10 @@ astToCSS = (options) ->
         'ruleset'       : 1
         'value2'        : 1
 
-    _m_delimited = 
-        'atrules'       : 1
-        
     _m_primitive = 
         'cdc'           : 'cdc'
         'cdo'           : 'cdo'
-        'declDelim'     : ''
+        'declDelim'     : ';'
         'delim'         : ','
         'namespace'     : '|'
         'parentselector': '&'
@@ -76,14 +73,15 @@ astToCSS = (options) ->
         'atruler'       : (t) -> _t(t[index(1)]) + _t(t[index(2)]) + '{' + _t(t[index(3)]) + '}'
         'attrib'        : (t) -> '[' + _composite(t) + ']'
         'block'         : (t) ->
-            rules = (_t(token) for token in t[index(1)..]).filter((s) -> s.trim())
+            rules = (_t(token) for token in t[index(1)..]).filter((s) -> s isnt ';' and s.trim())
             rulesText = rules.sort().join('; ')
-            if syntax == 'sass' then rulesText else '{ ' + rulesText + ' }'
+            return if syntax == 'sass' then rulesText else '{ ' + rulesText + ' }'
         'braces'        : (t) -> t[index(1)] + _composite(t, index(3)) + t[index(2)]
         'class'         : (t) -> '.' + _t(t[index(1)])
         'declaration'   : (t) -> (_t(token) for token in t[index(1)..]).join ''
-        'selector'      : (t) -> (_t(token) for token in t[index(1)..]).filter((s) -> s isnt ',' and s.trim()).sort().join(', ') + ' '
-        'value'         : (t) -> (_t(token) for token in t[index(1)..]).filter((s) -> s.trim()).join(' ')
+        'selector'      : (t) -> 
+            selectors = (_t(token) for token in t[index(1)..]).filter((s) -> s isnt ',' and s.trim())
+            return selectors.sort().join(', ') + ' '
         'default'       : (t) -> '!' + _composite(t) + 'default'
         'escapedString' : (t) -> '~' + t[index(1)]
         'filter'        : (t) -> _t(t[index(1)]) + ':' + _t(t[index(2)])
@@ -101,6 +99,9 @@ astToCSS = (options) ->
         'shash'         : (t) -> '#' + t[index(1)]
         'stylesheet'    : (t) -> _composite(t).replace(/[ ]+/g,' ')
         'uri'           : (t) -> 'url(' + _composite(t) + ')'
+        'value'         : (t) -> 
+            values = (_t(token) for token in t[index(1)..])
+            return values.join('').replace(/[ ]+/g,' ').trim()
         'variable'      : (t) -> (if syntax == 'less' then '@' else '$') + _t(t[index(1)])
         'variableslist' : (t) -> _t(t[index(1)]) + '...'
         'vhash'         : (t) -> '#' + t[index(1)]

@@ -44,7 +44,7 @@ describe('Printer', function() {
   it('should print interpolation in calc with longer interpolated expression', function() {
     return expectPrinterOutput('interpolation-expression-in-calc');
   });
-  xit('should print functions inside interpolation', function() {
+  it('should print functions inside interpolation', function() {
     return expectPrinterOutput('interpolation-functions');
   });
   xit('should print media-queries', function() {
@@ -56,10 +56,10 @@ describe('Printer', function() {
   it('should print nested functions', function() {
     return expectPrinterOutput('nested-functions');
   });
-  xit('should print expressions inside url()', function() {
+  it('should print expressions inside url()', function() {
     return expectPrinterOutput('expression-in-url');
   });
-  xit('should print variables assignments', function() {
+  it('should print variables assignments', function() {
     return expectPrinterOutput('variables');
   });
   return it('should print base64 values', function() {
