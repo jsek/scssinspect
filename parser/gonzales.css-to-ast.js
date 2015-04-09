@@ -1891,7 +1891,10 @@ syntaxes.css = {
     scss.getAtcontent = function() {
         var startPos = pos,
             x = [NodeType.AtcontentType, this.getAtkeyword()];
-        pos++;
+        while (pos < tokensLength) {
+            if (this.checkSC(pos)) x = x.concat(this.getSC());
+            else break;
+        }
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
     scss.checkBlockdecl1 = function(i) {
