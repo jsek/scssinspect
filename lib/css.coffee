@@ -6,6 +6,7 @@ astToCSS = (options) ->
             if t in Object.keys(_m_primitive)        then return _m_primitive[t]
             else if t in Object.keys(_m_simple)      then return _simple(tree)
             else if t in Object.keys(_m_composite)   then return _composite(tree)
+            else if t in Object.keys(_m_delimited)   then return _composite(tree) + ';'
             else if t in _suppressed                 then return ''
             else                                          return _unique[t](tree)
         catch e
@@ -43,7 +44,6 @@ astToCSS = (options) ->
         'atruleb'       : 1
         'atrulerq'      : 1
         'atrulers'      : 1
-        'atrules'       : 1
         'condition'     : 1
         'dimension'     : 1
         'filterv'       : 1
@@ -56,12 +56,15 @@ astToCSS = (options) ->
         'property'      : 1
         'ruleset'       : 1
         'value2'        : 1
+
+    _m_delimited = 
+        'atrules'       : 1
         
     _m_primitive = 
         'cdc'           : 'cdc'
         'cdo'           : 'cdo'
         'declDelim'     : ''
-        'delim'         : ''
+        'delim'         : ','
         'namespace'     : '|'
         'parentselector': '&'
         'propertyDelim' : ':'
@@ -79,7 +82,7 @@ astToCSS = (options) ->
         'braces'        : (t) -> t[index(1)] + _composite(t, index(3)) + t[index(2)]
         'class'         : (t) -> '.' + _t(t[index(1)])
         'declaration'   : (t) -> (_t(token) for token in t[index(1)..]).join ''
-        'selector'      : (t) -> (_t(token) for token in t[index(1)..]).filter((s) -> s.trim()).sort().join(', ') + ' '
+        'selector'      : (t) -> (_t(token) for token in t[index(1)..]).filter((s) -> s isnt ',' and s.trim()).sort().join(', ') + ' '
         'value'         : (t) -> (_t(token) for token in t[index(1)..]).filter((s) -> s.trim()).join(' ')
         'default'       : (t) -> '!' + _composite(t) + 'default'
         'escapedString' : (t) -> '~' + t[index(1)]
@@ -89,6 +92,7 @@ astToCSS = (options) ->
         'global'        : (t) -> '!' + _composite(t) + 'global'
         'important'     : (t) -> '!' + _composite(t) + 'important'
         'interpolatedVariable': (t) -> (if syntax == 'less' then '@{' else '#{') + _t(t[index(1)]) + '}'
+        'namedparameter': (t) -> (_t(token) for token in t[index(1)..]).join ''
         'nthselector'   : (t) -> ':' + _simple(t[index(1)]) + '(' + _composite(t, index(2)) + ')'
         'percentage'    : (t) -> _t(t[index(1)]) + '%'
         'placeholder'   : (t) -> '%' + _t(t[index(1)])

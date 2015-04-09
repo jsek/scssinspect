@@ -122,6 +122,7 @@ var NodeType = {
     LoopType: 'loop',
     MediaQueryType: 'mediaquery',
     MixinType: 'mixin',
+    NamedParameterType: 'namedparameter',
     NamespaceType: 'namespace',
     NthType: 'nth',
     NthselectorType: 'nthselector',
@@ -1844,7 +1845,8 @@ syntaxes.css = {
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
     scss.checkArgument = function(i) {
-        return this.checkDeclaration(i) ||
+        return this.checkNamedParameter(i) ||
+            this.checkDeclaration(i) ||
             this.checkFunction(i) ||
             this.checkVariablesList(i) ||
             this.checkVariable(i) ||
@@ -1862,7 +1864,8 @@ syntaxes.css = {
             this.checkParentSelector(i);
     };
     scss.getArgument = function() {
-        if (this.checkDeclaration(pos)) return this.getDeclaration();
+        if (this.checkNamedParameter(pos)) return this.getNamedParameter();
+        else if (this.checkDeclaration(pos)) return this.getDeclaration();
         else if (this.checkFunction(pos)) return this.getFunction();
         else if (this.checkVariablesList(pos)) return this.getVariablesList();
         else if (this.checkVariable(pos)) return this.getVariable();
@@ -2381,6 +2384,26 @@ syntaxes.css = {
         if (this.checkBlock(pos)) x.push(this.getBlock());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
     };
+    scss.checkNamedParameter = function(i) {
+        var start = i,
+            l;
+        if (i >= tokensLength) return 0;
+        if (l = this.checkVariable(i)) i += l;
+        else return 0;
+        if (l = this.checkPropertyDelim(i)) i++;
+        else return 0;
+        if (l = this.checkValueDelimitedByComma(i)) i += l;
+        else return 0;
+        return i - start;
+    };
+    scss.getNamedParameter = function() {
+        var startPos = pos,
+            x = [NodeType.NamedParameterType];
+        x.push(this.getVariable());
+        x.push(this.getPropertyDelim());
+        x.push(this.getValueDelimitedByComma());
+        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+    };
     scss.checkOperator = function(i) {
         if (i >= tokensLength) return 0;
         switch(tokens[i].type) {
@@ -2617,6 +2640,15 @@ syntaxes.css = {
         }
         return i - start;
     };
+    scss.checkValueDelimitedByComma = function(i) {
+        var start = i,
+            l;
+        while (i < tokensLength && tokens[i].type !== TokenType.Comma) {
+            if (l = this._checkValue(i)) i += l;
+            if (!l || this.checkBlock(i - l)) break;
+        }
+        return i - start;
+    };
     scss._checkValue = function(i) {
         return this.checkSC(i) ||
             this.checkInterpolatedExpression(i) ||
@@ -2635,6 +2667,20 @@ syntaxes.css = {
             x = [NodeType.ValueType],
             t, _pos;
         while (pos < tokensLength) {
+            _pos = pos;
+            if (!this._checkValue(pos)) break;
+            t = this._getValue();
+            if ((needInfo && typeof t[1] === 'string') || typeof t[0] === 'string') x.push(t);
+            else x = x.concat(t);
+            if (this.checkBlock(_pos)) break;
+        }
+        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+    };
+    scss.getValueDelimitedByComma = function() {
+        var startPos = pos,
+            x = [NodeType.ValueType],
+            t, _pos;
+        while (pos < tokensLength && tokens[pos].type !== TokenType.Comma) {
             _pos = pos;
             if (!this._checkValue(pos)) break;
             t = this._getValue();

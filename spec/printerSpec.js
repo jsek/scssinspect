@@ -35,7 +35,7 @@ describe('Printer', function() {
     expectPrinterOutput('comments1');
     return expectPrinterOutput('comments2');
   });
-  xit('should print stylesheet with import statements', function() {
+  it('should print stylesheet with import statements', function() {
     return expectPrinterOutput('import-strings');
   });
   it('should print interpolation in calc with short interpolated expression', function() {
@@ -53,7 +53,7 @@ describe('Printer', function() {
   xit('should print negative values', function() {
     return expectPrinterOutput('negative-values');
   });
-  xit('should print nested functions', function() {
+  it('should print nested functions', function() {
     return expectPrinterOutput('nested-functions');
   });
   xit('should print expressions inside url()', function() {

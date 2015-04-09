@@ -19,7 +19,7 @@ describe 'Printer', ->
         expectPrinterOutput 'comments1'
         expectPrinterOutput 'comments2'
 
-    xit 'should print stylesheet with import statements', ->
+    it 'should print stylesheet with import statements', ->
         expectPrinterOutput 'import-strings'
 
     it 'should print interpolation in calc with short interpolated expression', ->
@@ -37,7 +37,7 @@ describe 'Printer', ->
     xit 'should print negative values', ->
         expectPrinterOutput 'negative-values'
             
-    xit 'should print nested functions', ->
+    it 'should print nested functions', ->
         expectPrinterOutput 'nested-functions'
             
     xit 'should print expressions inside url()', ->
