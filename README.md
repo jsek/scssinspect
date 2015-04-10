@@ -15,6 +15,7 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 * [Integration](#integration)
 * [Reporters](#reporters)
 * [Known issues](#known-issues)
+* [Performance](#performance)
 
 ## Overview
 
@@ -86,7 +87,7 @@ If you wish to log results as HTML and not break the build, use following exampl
 
 ``` yaml
 script:
-  - "scssinspect -t 30 ./path/to/src" > logs/scssinspect.html || true
+  - "scssinspect -t 30 -r html ./path/to/src" > logs/scssinspect.html || true
 ```
 
 ## Reporters
@@ -148,3 +149,17 @@ HTML reporter is well suited for CI usage. (Note that example below got indentat
 Scssinspect is dependent on Gonzales-PE parser which sometimes cannot parse scss 
 libraries (like bootstrap). It is recommended to ignore these files or directories 
 using `--ignore` flag or `ignore` property in .scssinspectrc. 
+
+## Performance
+
+Workstation:
+- CPU: Intel Xeon 3.40GHz
+
+Codebase (big):
+- 200 files,  ~35 000 LOC
+
+```
+> powershell Measure-Command {scssinspect -t 30 -y property --diff none ./path/to/src}
+
+TotalSeconds      : 4.22
+```
