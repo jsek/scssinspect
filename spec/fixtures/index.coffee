@@ -7,6 +7,7 @@ fixtures        = [
     'comments2'
     'complex-selector'
     'expression-in-url'
+    'if-else'
     'import-strings'
     'indentation'
     'interpolation'

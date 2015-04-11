@@ -2035,13 +2035,29 @@ syntaxes.css = {
     };
     scss.checkCondition = function(i) {
         var start = i,
-            l;
+            l, i2 = 0;
         if (i >= tokensLength) return 0;
         if (l = this.checkAtkeyword(i)) i += l;
         else return 0;
-        if (['if', 'else'].indexOf(tokens[start + 1].value) < 0) return 0;
+        if (tokens[start + 1].value !== 'if') return 0;
+        if (l = this.checkConditionBody(i)) i += l;
+        else return 0;
+        
+        if (l = this.checkSC(pos)) i += l;
+        
+        if (l = this.checkAtkeyword(i) && tokens[i + 1].value === 'else') {
+             i2 += l;
+             if (l = this.checkConditionBody(i2)) {
+                i += l + i2;
+            }
+        }
+        return i - start;
+    };
+    scss.checkConditionBody = function(i) {
+        var start = i,
+            l;
         while (i < tokensLength) {
-            if (l = this.checkBlock(i)) break;
+            if (l = this.checkBlock(i)) { i += l; break; }
             else if (l = this.checkVariable(i) ||
                      this.checkIdent(i) ||
                      this.checkSC(i) ||
@@ -2057,9 +2073,27 @@ syntaxes.css = {
     scss.getCondition = function() {
         var startPos = pos,
             x = [NodeType.ConditionType];
+
         x.push(this.getAtkeyword());
+        x = x.concat(this.getConditionBody());
+
+        if (this.checkSC(pos)) x = x.concat(this.getSC());
+
+        if (pos < tokensLength
+            && this.checkAtkeyword(pos)
+            && tokens[pos + 1].value === 'else'){
+            x.push(this.getAtkeyword());
+            x = x.concat(this.getConditionBody());
+        }
+        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+    };
+    scss.getConditionBody = function() {
+        var x = [];
         while (pos < tokensLength) {
-            if (this.checkBlock(pos)) break;
+            if (this.checkBlock(pos)) {
+                x.push(this.getBlock()); 
+                break;
+            }
             else if (this.checkVariable(pos)) x.push(this.getVariable());
             else if (this.checkIdent(pos)) x.push(this.getIdent());
             else if (this.checkNumber(pos)) x.push(this.getNumber());
@@ -2069,7 +2103,7 @@ syntaxes.css = {
             else if (this.checkString(pos)) x.push(this.getString());
             else if (this.checkArguments(pos)) x.push(this.getArguments());
         }
-        return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
+        return x;
     };
     scss.checkDefault = function(i) {
         var start = i,

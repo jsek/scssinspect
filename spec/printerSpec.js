@@ -65,7 +65,10 @@ describe('Printer', function() {
   it('should print base64 values', function() {
     return expectPrinterOutput('base64');
   });
-  return it('should print negative values', function() {
+  it('should print complex selector', function() {
     return expectPrinterOutput('complex-selector');
+  });
+  return it('should print if-else statement', function() {
+    return expectPrinterOutput('if-else');
   });
 });

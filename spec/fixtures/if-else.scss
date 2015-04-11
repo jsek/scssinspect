@@ -1,0 +1,9 @@
+.a { 
+	@if (&) 
+	{ 
+		& { @content; } 
+	} 
+	@else { 
+		@content 
+	} 
+}
