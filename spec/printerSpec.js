@@ -47,8 +47,9 @@ describe('Printer', function() {
   it('should print functions inside interpolation', function() {
     return expectPrinterOutput('interpolation-functions');
   });
-  xit('should print media-queries', function() {
-    return expectPrinterOutput('media-queries');
+  it('should print media-queries', function() {
+    expectPrinterOutput('media-queries');
+    return expectPrinterOutput('media-queries-typical-usage');
   });
   it('should print negative values', function() {
     return expectPrinterOutput('negative-values');
