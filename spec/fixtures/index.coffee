@@ -5,6 +5,7 @@ fixtures        = [
     'base64'
     'comments1'
     'comments2'
+    'complex-selector'
     'expression-in-url'
     'import-strings'
     'indentation'

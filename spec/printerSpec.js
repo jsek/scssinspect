@@ -62,7 +62,10 @@ describe('Printer', function() {
   it('should print variables assignments', function() {
     return expectPrinterOutput('variables');
   });
-  return it('should print base64 values', function() {
+  it('should print base64 values', function() {
     return expectPrinterOutput('base64');
+  });
+  return it('should print negative values', function() {
+    return expectPrinterOutput('complex-selector');
   });
 });

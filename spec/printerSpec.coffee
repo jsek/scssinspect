@@ -48,3 +48,6 @@ describe 'Printer', ->
 
     it 'should print base64 values', ->
         expectPrinterOutput 'base64'
+
+    it 'should print negative values', ->
+        expectPrinterOutput 'complex-selector'

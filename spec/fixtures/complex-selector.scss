@@ -1,0 +1,6 @@
+.b { 
+	body:not(.responsive) & 
+	{ 
+		@content 
+	} 
+}

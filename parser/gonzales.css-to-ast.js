@@ -331,6 +331,7 @@ var rules = {
     'loop': function() { if (s.checkLoop(pos)) return s.getLoop() },
     'mediaQuery': function () { if (s.checkMediaQuery(pos)) return s.getMediaQuery() },
     'mixin': function () { if (s.checkMixin(pos)) return s.getMixin() },
+    'namedparameter': function() { if (s.checkNamedParameter(pos)) return s.getNamedParameter() },
     'namespace': function() { if (s.checkNamespace(pos)) return s.getNamespace() },
     'nth': function() { if (s.checkNth(pos)) return s.getNth() },
     'nthselector': function() { if (s.checkNthselector(pos)) return s.getNthselector() },
@@ -1905,10 +1906,10 @@ syntaxes.css = {
         else if (l = this.checkInclude(i)) tokens[i].bd_kind = 2;
         else if (l = this.checkLoop(i)) tokens[i].bd_kind = 3;
         else if (l = this.checkFilter(i)) tokens[i].bd_kind = 4;
-        else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 5;
+        else if (l = this.checkRuleset(i)) tokens[i].bd_kind = 5;
         else if (l = this.checkAtcontent(i)) tokens[i].bd_kind = 6;
         else if (l = this.checkAtrule(i)) tokens[i].bd_kind = 7;
-        else if (l = this.checkRuleset(i)) tokens[i].bd_kind = 8;
+        else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 8;
         else return 0;
         i += l;
         if (i < tokensLength && (l = this.checkDeclDelim(i))) i += l;
@@ -1934,7 +1935,7 @@ syntaxes.css = {
                 x = this.getFilter();
                 break;
             case 5:
-                x = this.getDeclaration();
+                x = this.getRuleset();
                 break;
             case 6:
                 x = this.getAtcontent();
@@ -1943,7 +1944,7 @@ syntaxes.css = {
                 x = this.getAtrule();
                 break;
             case 8:
-                x = this.getRuleset();
+                x = this.getDeclaration();
                 break;
         }
         return sc
@@ -1961,9 +1962,9 @@ syntaxes.css = {
         else if (l = this.checkInclude(i)) tokens[i].bd_kind = 4;
         else if (l = this.checkLoop(i)) tokens[i].bd_kind = 5;
         else if (l = this.checkFilter(i)) tokens[i].bd_kind = 6;
-        else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 7;
+        else if (l = this.checkRuleset(i)) tokens[i].bd_kind = 7;
         else if (l = this.checkAtrule(i)) tokens[i].bd_kind = 8;
-        else if (l = this.checkRuleset(i)) tokens[i].bd_kind = 9;
+        else if (l = this.checkDeclaration(i)) tokens[i].bd_kind = 9;
         else return 0;
         i += l;
         if (l = this.checkSC(i)) i += l;
@@ -1992,13 +1993,13 @@ syntaxes.css = {
                 x = this.getFilter();
                 break;
             case 7:
-                x = this.getDeclaration();
+                x = this.getRuleset();
                 break;
             case 8:
                 x = this.getAtrule();
                 break;
             case 9:
-                x = this.getRuleset();
+                x = this.getDeclaration();
                 break;
         }
         return sc
