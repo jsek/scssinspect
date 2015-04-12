@@ -159,7 +159,6 @@ describe 'Inspector', ->
                 anonymize: ['number']
             expectMatchCount fixtures['anonymize-string'], opts, 0
 
-
     describe 'anonymize (string)', ->
         
         it 'matches rules if the only difference are strings', ->
@@ -175,3 +174,19 @@ describe 'Inspector', ->
                 thresholdType: 'char'
                 anonymize: ['string']
             expectMatchCount fixtures['anonymize-number'], opts, 0
+
+    describe 'anonymize (selector)', ->
+        
+        it 'matches rules if the only difference are selectors', ->
+            opts =
+                threshold: 2
+                thresholdType: 'property'
+                anonymize: ['selector']
+            expectMatchCount fixtures['anonymize-selector'], opts, 1
+
+        it 'does not match rules if the only difference are selectors and anonymize option is not set for selectors', ->
+            opts =
+                threshold: 2
+                thresholdType: 'property'
+                anonymize: ['string']
+            expectMatchCount fixtures['anonymize-selector'], opts, 0

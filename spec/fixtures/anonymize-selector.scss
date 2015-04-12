@@ -1,0 +1,15 @@
+
+
+.b { 
+	.a { background: blue }
+	.c, 
+	.d:not(.e) { 
+		color: red
+	}
+}
+
+
+.b, div { 
+	.link { color: red }
+	.another_link { background: blue }
+}

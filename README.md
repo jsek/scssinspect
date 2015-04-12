@@ -19,6 +19,11 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 
 ## Overview
 
+There are several types of AST nodes that can be anonymized:
+- number
+- selector
+- string
+
 Example console output:
 
 ![screenshot](images/screenshot_0.1.4.png)
@@ -40,7 +45,7 @@ Usage: scssinspect [options] <paths ...>
 
 Duplicate code and structure detection for Scss.
 Values matching is enabled by default. Example use:
-scssinspect --ignore "merged.scss" ./path/to/src
+scssinspect --ignore "merged.scss" -a 'number|selector|string' ./path/to/src
 
 Options:
 

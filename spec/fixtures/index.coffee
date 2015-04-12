@@ -3,6 +3,7 @@ path    = require('path')
 absolutePaths   = {}
 fixtures        = [ 
     'anonymize-number'
+    'anonymize-selector'
     'anonymize-string'
     'base64'
     'base64'
