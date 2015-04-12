@@ -12,7 +12,9 @@ class Anonymizer
 
 	_index: (x) -> if @needInfo then x + 1 else x
 
-	_addInfo: (x) -> if @needInfo then x.unshift({}) else x
+	_addInfo: (x) -> 
+		if @needInfo then x.unshift({})
+		return x
 
 	_anonymizeValue: (tree, type, value, options) ->
 		dfs tree, (n) =>
