@@ -6,17 +6,19 @@ beautify     = require('js-beautify').js_beautify
 
 Match        = require('./match')
 astToCSS     = require('./css').astToCSS
+anonymizer   = require('./anonymizer')()
 
 
 class Inspector extends EventEmitter
 
     constructor: (@_filePaths = [], opts = {}) ->
         @_threshold     = if opts.threshold == 0 then 0 else opts.threshold or 50
-        @_thresholdType = opts.thresholdType || 'char'
+        @_thresholdType = opts.thresholdType or 'char'
         @_ignoreValues  = opts.ignoreValues
         @_diff          = opts.diff
         @_skip          = opts.skip
         @_syntax        = opts.syntax
+        @_anonymize     = opts.anonymize or []
         @_hash          = Object.create(null)
         @numFiles       = @_filePaths.length
         unless @_diff is 'none'
@@ -54,12 +56,16 @@ class Inspector extends EventEmitter
             console.log beautify JSON.stringify syntaxTree
         else
             syntaxTree = parse(css: contents, syntax: 'scss', needInfo: true)
+
+            for type in @_anonymize
+                anonymizer.anonymize(syntaxTree, type, true)
+
             @_walk syntaxTree, (rule) =>
                 @_insert rule
                 rule.loc.source = filePath
 
 
-    _analyze: ->
+    _analyze: ->            
         for key of @_hash
             rules = @_hash[key]
             if rules?.length > 1
@@ -98,12 +104,12 @@ class Inspector extends EventEmitter
 
 
     _getHashKey: (ruleset) -> 
-        structure = astToCSS({ ast:ruleset, syntax:'scss' }) 
+        minCss = astToCSS({ ast:ruleset, syntax:'scss' })
         ruleset.type = 'ruleset'
         ruleset.pos = "(#{ruleset[0].ln}, #{ruleset[0].end?.ln})"
         ruleset.loc =
             start: {line: ruleset[0].ln}
             end  : {line: ruleset[0].end?.ln}
-        return structure
+        return minCss
 
 module.exports = Inspector

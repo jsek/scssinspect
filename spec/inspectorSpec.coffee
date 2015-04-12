@@ -142,3 +142,36 @@ describe 'Inspector', ->
                 threshold: 5
                 thresholdType: 'property'
             expectMatchCount fixtures.intersection, opts, 0
+
+    describe 'anonymize (number)', ->
+            
+        it 'matches rules if the only difference are numbers', ->
+            opts =
+                threshold: 0
+                thresholdType: 'char'
+                anonymize: ['number']
+            expectMatchCount fixtures['anonymize-number'], opts, 1
+        
+        it 'does not match rules if the only difference are strings', ->
+            opts =
+                threshold: 0
+                thresholdType: 'char'
+                anonymize: ['number']
+            expectMatchCount fixtures['anonymize-string'], opts, 0
+
+
+    describe 'anonymize (string)', ->
+        
+        it 'matches rules if the only difference are strings', ->
+            opts =
+                threshold: 0
+                thresholdType: 'char'
+                anonymize: ['string']
+            expectMatchCount fixtures['anonymize-string'], opts, 1
+
+        it 'does not match rules if the only difference are numbers', ->
+            opts =
+                threshold: 0
+                thresholdType: 'char'
+                anonymize: ['string']
+            expectMatchCount fixtures['anonymize-number'], opts, 0

@@ -1,0 +1,9 @@
+
+div { background: url("abc.png"); }
+.a,.b { color: rgba(123,133,0,.33); }
+#c {
+    div { background: url("abc123.png"); }
+}
+#d {
+    div { background: url('path/to/image'); }
+}

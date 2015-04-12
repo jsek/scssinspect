@@ -18,7 +18,7 @@ program
   .usage('[options] <paths ...>\n\n' + summary)
   .option('-t, --threshold <number>'        , 'minimal length of duplicated text (default: 50)', parseInt)
   .option('-y, --type [char|token|property]', 'type of element to apply threshold (default: char)')
-//  .option('-i, --ignore-values'             , 'don\'t match exact numeric/color values')
+  .option('-a, --anonymize <types>'         , 'types of values to be anonymized (e.g. \'number\')')
   .option('    --syntax'                    , 'print syntax trees only')
   .option('-c, --config'                    , 'path to config file (default: .scssinspectrc)')
   .option('-s, --skip'                      , 'skip files with parsing errors')
@@ -43,7 +43,7 @@ if (fs.existsSync(rcPath) && fs.lstatSync(rcPath).isFile()) {
         process.exit(1);
     }
 
-  ['diff', 'ignore', 'reporter', 'skip', 'threshold', 'type']
+  ['anonymize', 'diff', 'ignore', 'reporter', 'skip', 'threshold', 'type']
       .forEach(function (option) {
         if (program[option] === undefined && (option in rc)) {
             program[option] = rc[option];
@@ -89,6 +89,7 @@ var inspector = new Inspector(paths, {
     diff            : program.diff,
     skip            : program.skip,
     syntax          : program.syntax,
+    anonymize       : (program.anonymize || '').split('|'),
     ignoreValues    : program['ignore-values']
 });
 

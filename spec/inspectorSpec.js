@@ -150,7 +150,7 @@ describe('Inspector', function() {
       return expectMatchCount(fixtures.intersection, opts, 0);
     });
   });
-  return describe('threshold (properties)', function() {
+  describe('threshold (properties)', function() {
     it('matches rules if threshold is lower than rule size', function() {
       var opts;
       opts = {
@@ -166,6 +166,46 @@ describe('Inspector', function() {
         thresholdType: 'property'
       };
       return expectMatchCount(fixtures.intersection, opts, 0);
+    });
+  });
+  describe('anonymize (number)', function() {
+    it('matches rules if the only difference are numbers', function() {
+      var opts;
+      opts = {
+        threshold: 0,
+        thresholdType: 'char',
+        anonymize: ['number']
+      };
+      return expectMatchCount(fixtures['anonymize-number'], opts, 1);
+    });
+    return it('does not match rules if the only difference are strings', function() {
+      var opts;
+      opts = {
+        threshold: 0,
+        thresholdType: 'char',
+        anonymize: ['number']
+      };
+      return expectMatchCount(fixtures['anonymize-string'], opts, 0);
+    });
+  });
+  return describe('anonymize (string)', function() {
+    it('matches rules if the only difference are strings', function() {
+      var opts;
+      opts = {
+        threshold: 0,
+        thresholdType: 'char',
+        anonymize: ['string']
+      };
+      return expectMatchCount(fixtures['anonymize-string'], opts, 1);
+    });
+    return it('does not match rules if the only difference are numbers', function() {
+      var opts;
+      opts = {
+        threshold: 0,
+        thresholdType: 'char',
+        anonymize: ['string']
+      };
+      return expectMatchCount(fixtures['anonymize-number'], opts, 0);
     });
   });
 });
