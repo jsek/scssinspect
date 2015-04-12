@@ -1,6 +1,6 @@
 {
   "name": "scssinspect",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Detect dupplication in your scss stylesheets",
   "keywords": [
     "scssinspect",
