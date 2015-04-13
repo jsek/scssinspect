@@ -45,7 +45,7 @@ Usage: scssinspect [options] <paths ...>
 
 Duplicate code and structure detection for Scss.
 Values matching is enabled by default. Example use:
-scssinspect --ignore "merged.scss" -a 'number|selector|string' ./path/to/src
+scssinspect --ignore "merged.scss" ./path/to/src
 
 Options:
 
