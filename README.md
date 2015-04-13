@@ -20,9 +20,12 @@ Detect copy-pasted and structurally similar code in your Scss stylesheets.
 ## Overview
 
 There are several types of AST nodes that can be anonymized:
+- interpolation
 - number
 - selector
 - string
+- value
+- variable
 
 Example console output:
 

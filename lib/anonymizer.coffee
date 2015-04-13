@@ -27,15 +27,32 @@ class Anonymizer
 			else 
 				return false
 
+	_replaceNode: (tree, type, value, options) ->
+		dfs tree, (n) =>
+			if n instanceof Array
+				if n?[@_index(0)] is type
+					n.splice.apply(n, [0, n.length].concat value)
+				return true
+			else 
+				return false
+
 	anonymize: (tree, type, needInfo) ->
 		@needInfo = !!needInfo
 		switch type
+			when 'interpolation'
+				ident = @_addInfo ['ident','x']
+				@_replaceNode tree, 'interpolatedVariable', ident
 			when 'number'    then @_anonymizeValue tree, type, 0
-			when 'string'    then @_anonymizeValue tree, type, '"?"'
-			when 'selector'  
+			when 'selector'
 				ident = @_addInfo ['ident','x']
 				newSelector = @_addInfo ['simpleselector', ident]
 				@_anonymizeValue tree, 'selector', newSelector, {trim: true}
-
+			when 'string'    then @_anonymizeValue tree, type, '"?"'
+			when 'value'
+				ident = @_addInfo ['ident','x']
+				@_anonymizeValue tree, type, ident, {trim:true}
+			when 'variable'
+				ident = @_addInfo ['ident','x']
+				@_anonymizeValue tree, type, ident
 
 module.exports = -> new Anonymizer()
