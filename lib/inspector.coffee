@@ -5,7 +5,7 @@ fs           = require('fs')
 beautify     = require('js-beautify').js_beautify
 
 Match        = require('./match')
-astToCSS     = require('./css').astToCSS
+astToCSS     = require('./printer').astToCSS
 anonymizer   = require('./anonymizer')()
 
 

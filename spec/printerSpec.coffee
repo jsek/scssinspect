@@ -3,7 +3,7 @@ fs              = require('fs')
 
 fixtures        = require('./fixtures')
 cssToAST        = require('../parser/gonzales').cssToAST
-astToCSS        = require('../lib/css').astToCSS
+astToCSS        = require('../lib/printer').astToCSS
 
 describe 'Printer', ->
 
