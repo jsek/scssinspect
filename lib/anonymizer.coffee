@@ -4,8 +4,8 @@ children = (node) ->
 dfs = (node, callback) ->
 	if node
 		unless callback(node) is false
-			for c in children(node)
-				dfs c, callback
+			for child in children(node)
+				dfs child, callback
 
 class Anonymizer
 	constructor: ->
@@ -17,42 +17,44 @@ class Anonymizer
 		return x
 
 	_anonymizeValue: (tree, type, value, options) ->
-		dfs tree, (n) =>
-			if n instanceof Array
-				if n?[@_index(0)] is type
-					n[@_index(1)] = value
-					if options?.trim
-						n.splice(@_index(1) + 1, n.length)
-				return true
-			else 
-				return false
+		dfs tree, (node) =>
+			@_onMatchedByType node, type, (n) => 
+				n[@_index(1)] = value
+				if options?.trim
+					n.splice(@_index(1) + 1, n.length)
 
 	_replaceNode: (tree, type, value, options) ->
-		dfs tree, (n) =>
-			if n instanceof Array
-				if n?[@_index(0)] is type
-					n.splice.apply(n, [0, n.length].concat value)
+		dfs tree, (node) =>
+			@_onMatchedByType node, type, (n) => 
+				n.splice.apply(n, [0, n.length].concat value)
+
+	_onMatchedByType: (node, type, action) ->
+		if node instanceof Array
+				if node?[@_index(0)] is type
+					action(node)
 				return true
-			else 
+			else
 				return false
+
+	_fakeNode: -> @_addInfo ['ident','x']
 
 	anonymize: (tree, type, needInfo) ->
 		@needInfo = !!needInfo
 		switch type
+			when 'class'
+				@_anonymizeValue tree, type, @_fakeNode()
 			when 'interpolation'
-				ident = @_addInfo ['ident','x']
-				@_replaceNode tree, 'interpolatedVariable', ident
-			when 'number'    then @_anonymizeValue tree, type, 0
+				@_replaceNode tree, 'interpolatedVariable', @_fakeNode()
+			when 'number'
+				@_anonymizeValue tree, type, 0
 			when 'selector'
-				ident = @_addInfo ['ident','x']
-				newSelector = @_addInfo ['simpleselector', ident]
-				@_anonymizeValue tree, 'selector', newSelector, {trim: true}
-			when 'string'    then @_anonymizeValue tree, type, '"?"'
+				newSelector = @_addInfo ['simpleselector', @_fakeNode()]
+				@_anonymizeValue tree, type, newSelector, {trim: true}
+			when 'string'
+				@_anonymizeValue tree, type, '"?"'
 			when 'value'
-				ident = @_addInfo ['ident','x']
-				@_anonymizeValue tree, type, ident, {trim:true}
+				@_anonymizeValue tree, type, @_fakeNode(), {trim:true}
 			when 'variable'
-				ident = @_addInfo ['ident','x']
-				@_anonymizeValue tree, type, ident
+				@_anonymizeValue tree, type, @_fakeNode()
 
 module.exports = -> new Anonymizer()
