@@ -26,6 +26,7 @@ Example console output:
 [Example HTML report](https://github.com/jsek/scssinspect/blob/master/images/html-reporter_0.2.1.png)
 
 There are several types of AST nodes that can be anonymized:
+- base64
 - class
 - interpolation
 - number
