@@ -54,6 +54,8 @@ class Anonymizer
 				@_anonymizeValue tree, type, newSelector, {trim: true}
 			when 'string'
 				@_anonymizeValue tree, type, '"?"'
+			when 'url'
+				@_anonymizeValue tree, 'uri', @_fakeNode()
 			when 'value'
 				@_anonymizeValue tree, type, @_fakeNode(), {trim:true}
 			when 'variable'

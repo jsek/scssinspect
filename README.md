@@ -32,6 +32,7 @@ There are several types of AST nodes that can be anonymized:
 - number
 - selector
 - string
+- url
 - value
 - variable
 
