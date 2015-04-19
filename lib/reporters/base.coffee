@@ -102,7 +102,7 @@ class BaseReporter
         if filePath.charAt(0) is '/'
             filePath = path.relative(process.cwd(), filePath)
             
-        filePath + ":#{node.loc.start.line},#{node.loc.end.line}"
+        filePath + ":#{node.loc.start},#{node.loc.end}"
 
 
 module.exports = BaseReporter

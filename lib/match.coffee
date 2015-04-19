@@ -56,8 +56,8 @@ class Match
     ###
     _getLines : (fileContents, node) ->
         lines = fileContents[node.loc.source]
-        start = node.loc.start.line - 1
-        end = node.loc.end.line
+        start = node.loc.start - 1
+        end = node.loc.end
         strip lines.slice(start, end).join('\n')
 
 
