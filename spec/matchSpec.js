@@ -50,22 +50,14 @@ describe('Match', function() {
       rules = [
         {
           loc: {
-            start: {
-              line: 2
-            },
-            end: {
-              line: 6
-            },
+            start: 2,
+            end: 6,
             source: file
           }
         }, {
           loc: {
-            start: {
-              line: 10
-            },
-            end: {
-              line: 13
-            },
+            start: 10,
+            end: 13,
             source: file
           }
         }
@@ -108,22 +100,14 @@ describe('Match', function() {
       rules = [
         {
           loc: {
-            start: {
-              line: 2
-            },
-            end: {
-              line: 6
-            },
+            start: 2,
+            end: 6,
             source: file
           }
         }, {
           loc: {
-            start: {
-              line: 10
-            },
-            end: {
-              line: 14
-            },
+            start: 10,
+            end: 14,
             source: file
           }
         }
@@ -145,22 +129,14 @@ describe('Match', function() {
       rules = [
         {
           loc: {
-            start: {
-              line: 1
-            },
-            end: {
-              line: 3
-            },
+            start: 1,
+            end: 3,
             source: file
           }
         }, {
           loc: {
-            start: {
-              line: 5
-            },
-            end: {
-              line: 6
-            },
+            start: 5,
+            end: 6,
             source: file
           }
         }

@@ -85,19 +85,11 @@ describe('Inspector', function() {
     match = found[0];
     expect(match.nodes).to.have.length(2);
     expect(match.nodes[0].type).to.be('ruleset');
-    expect(match.nodes[0].loc.start).to.eql({
-      line: 2
-    });
-    expect(match.nodes[0].loc.end).to.eql({
-      line: 6
-    });
+    expect(match.nodes[0].loc.start).to.eql(2);
+    expect(match.nodes[0].loc.end).to.eql(6);
     expect(match.nodes[1].type).to.be('ruleset');
-    expect(match.nodes[1].loc.start).to.eql({
-      line: 10
-    });
-    return expect(match.nodes[1].loc.end).to.eql({
-      line: 14
-    });
+    expect(match.nodes[1].loc.start).to.eql(10);
+    return expect(match.nodes[1].loc.end).to.eql(14);
   });
   it('includes a diff with the match, if enabled', function() {
     var inspector, match, opts;
