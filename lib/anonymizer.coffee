@@ -41,6 +41,8 @@ class Anonymizer
 	anonymize: (tree, type, needInfo) ->
 		@needInfo = !!needInfo
 		switch type
+			when 'arguments'
+				@_anonymizeValue tree, type, @_fakeNode(), {trim:true}
 			when 'base64'
 				@_anonymizeValue tree, type, 'data:image/png;base64,abc'
 			when 'class'
