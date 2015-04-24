@@ -61,6 +61,7 @@ Options:
   -t, --threshold <number>           minimal length of duplicated text (default: 50)
   -y, --type [char|token|property]   type of element to apply threshold (default: char)
   -a, --anonymize <types>            types of values to be anonymized (e.g. 'number')
+  -l, --lang [css|less|sass|scss]    set language (default: scss)
       --syntax                       print syntax trees only
   -c, --config                       path to config file (default: .scssinspectrc)
   -r, --reporter <name>              specify the reporter to use (you can also set custom path to *.js file)
@@ -78,6 +79,7 @@ be used in place of the defaults listed above. For example:
   "anonymize"     : "number|string"         // list of types delimited by '|'
   "threshold"     : 100,
   "type"          : "token",
+  "lang"          : "scss",
   "diff"          : "css",
   "reporter"      : "html",
   "skip"          : false,

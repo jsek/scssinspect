@@ -25,11 +25,12 @@ class Inspector extends EventEmitter
     constructor: (@_filePaths = [], opts = {}) ->
         @_threshold     = if opts.threshold == 0 then 0 else opts.threshold or 50
         @_thresholdType = opts.thresholdType or 'char'
-        @_ignoreValues  = opts.ignoreValues
-        @_diff          = opts.diff
-        @_skip          = opts.skip
-        @_syntax        = opts.syntax
         @_anonymize     = opts.anonymize or []
+        @_language      = opts.language or 'scss'
+        @_syntax        = opts.syntax
+        @_skip          = opts.skip
+        @_diff          = opts.diff
+        @_ignoreValues  = opts.ignoreValues
         @_hash          = Object.create(null)
         @numFiles       = @_filePaths.length
         unless @_diff is 'none'
@@ -72,10 +73,10 @@ class Inspector extends EventEmitter
     ###
     _parse: (filePath, contents) ->
         if @_syntax
-            syntaxTree = parse(css: contents, syntax: 'scss')
+            syntaxTree = parse(css: contents, syntax: @_language)
             console.log beautify JSON.stringify syntaxTree
         else
-            syntaxTree = parse(css: contents, syntax: 'scss', needInfo: true)
+            syntaxTree = parse(css: contents, syntax: @_language, needInfo: true)
 
             for type in @_anonymize
                 anonymizer.anonymize(syntaxTree, type, true)
@@ -125,7 +126,7 @@ class Inspector extends EventEmitter
         if @_thresholdType is 'char'
             hash.length >= @_threshold
         else if @_thresholdType is 'token'
-            tokensLength = parse(css: hash, syntax: 'scss', needInfo: true, sizeOnly: true)
+            tokensLength = parse(css: hash, syntax: @_language, needInfo: true, sizeOnly: true)
             tokensLength >= @_threshold
         else if @_thresholdType is 'property'
             propertiesLength = JSON.stringify(syntaxTree).match(/"declaration",\[\{[^\}]+\},"property"/g)?.length
@@ -139,7 +140,7 @@ class Inspector extends EventEmitter
     # the selectors and rules.
     ###
     _getHashKey: (ruleset) -> 
-        minCss = astToCSS({ ast:ruleset, syntax:'scss' })
+        minCss = astToCSS({ ast:ruleset, syntax:@_language })
         ruleset.type = 'ruleset'
         ruleset.loc =
             start: ruleset[0].ln

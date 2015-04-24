@@ -19,6 +19,7 @@ program
   .option('-t, --threshold <number>'        , 'minimal length of duplicated text (default: 50)', parseInt)
   .option('-y, --type [char|token|property]', 'type of element to apply threshold (default: char)')
   .option('-a, --anonymize <types>'         , 'types of values to be anonymized (e.g. \'number\')')
+  .option('-l, --lang [css|less|sass|scss]' , 'set language (default: scss)')
   .option('    --syntax'                    , 'print syntax trees only')
   .option('-c, --config'                    , 'path to config file (default: .scssinspectrc)')
   .option('-s, --skip'                      , 'skip files with parsing errors')
@@ -43,13 +44,26 @@ if (fs.existsSync(rcPath) && fs.lstatSync(rcPath).isFile()) {
         process.exit(1);
     }
 
-  ['anonymize', 'diff', 'ignore', 'reporter', 'skip', 'threshold', 'type']
+  [
+    'threshold', 
+    'type', 
+    'anonymize', 
+    'lang' ,
+    'skip',
+    'reporter', 
+    'diff', 
+    'ignore'
+  ]
       .forEach(function (option) {
         if (program[option] === undefined && (option in rc)) {
             program[option] = rc[option];
         }
     });
 }
+
+// Set defaults
+program.diff = program.diff || 'lines';
+program.lang = program.lang || 'scss';
 
 // Assume all unconsumed arguments are paths
 var suppliedPaths = (program.args.length) ? program.args : ['.'];
@@ -67,7 +81,7 @@ if (program.ignore) {
 var paths;
 try {
     paths = filepaths.getSync(suppliedPaths, {
-        suffix: '.scss',
+        suffix: '.' + program.lang,
         ignore: ignorePatterns
     });
 } catch (e) {
@@ -80,15 +94,13 @@ if (!paths.length) {
     process.exit(0);
 }
 
-// Set defaults
-program.diff = program.diff || 'lines';
-
 var inspector = new Inspector(paths, {
     threshold       : program.threshold,
     thresholdType   : program.type,
+    language        : program.lang,
+    syntax          : program.syntax,
     diff            : program.diff,
     skip            : program.skip,
-    syntax          : program.syntax,
     anonymize       : (program.anonymize || '').split('|'),
     ignoreValues    : program['ignore-values']
 });
