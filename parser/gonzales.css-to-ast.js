@@ -1610,7 +1610,7 @@ syntaxes.css = {
                 .concat([this.getString()])
                 .concat(this.getSC());
             pos++;
-        } else if (this.checkArgument(pos)) {
+        } else if (this.checkArgument && this.checkArgument(pos)) {
             uri = uri.concat([this.getArgument()]);
             pos++;
         } else {
