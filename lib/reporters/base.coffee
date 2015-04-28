@@ -17,13 +17,22 @@ class BaseReporter
     constructor: (@_inspector, opts = {}) ->
         @_found = 0
         @_skipped = 0
+        @_totalSize = 0
+        @_thresholdTypeName = @_getThresholdTypeName(opts.thresholdType or 'char')
         @_registerListener()
 
     ###*
     # Helpers
     ###
-    _pluralize : (count, text) -> unless count is 1 then text + 's' else text
+    _pluralize : (count, text) -> 
+        unless count is 1
+            if text[-1..-1] is 'y'
+                text[0..-2] + 'ies'
+            else
+                text + 's'
+        else text
     _pluralizeE : (count, text) -> unless count is 1 then text + 'es' else text
+    _getThresholdTypeName : (type) -> if type is 'char' then 'character' else type
 
     ###*
     # Registers a listener to the "match" event exposed by the Inspector instance.
@@ -35,6 +44,7 @@ class BaseReporter
     _registerListener: ->
         @_inspector.on 'match', (match) =>
             @_found++
+            @_totalSize += match.duplicationSize
             process.stdout.write @_getOutput(match)
             
         @_inspector.on 'warning', (warn) =>
@@ -48,6 +58,7 @@ class BaseReporter
     _registerSummary: ->
         @_inspector.on 'end', =>
             found = ''
+            total = ''
             numFiles = @_inspector.numFiles
             checked = "#{numFiles} #{@_pluralize(numFiles,'file')}"
             skipped = if @_skipped then " (#{@_skipped} #{@_pluralize(@_skipped,'file')} skipped)" else ''
@@ -56,8 +67,9 @@ class BaseReporter
                 found = chalk.black.bgGreen " No matches found across #{checked} "
             else
                 found = chalk.white.bgRed " #{@_found} #{@_pluralizeE(@_found,'match')} found across #{checked} "
+                total = chalk.white.bgRed "\n Total size: #{@_totalSize} #{@_pluralize(@_totalSize,@_thresholdTypeName)} "
             
-            process.stdout.write '\n' + found + skipped + '\n'
+            process.stdout.write '\n' + found + skipped + total + '\n'
 
     ###*
     # Accepts a diff object and returns a corresponding formatted diff string.

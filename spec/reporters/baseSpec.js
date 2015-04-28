@@ -85,7 +85,7 @@ describe('BaseReporter', function() {
     });
     return it('prints the correct results if matches were found', function() {
       return helpers.safeTestOutput(Inspector, TestReporter, 'intersection', function(o) {
-        return expect(o).to.be('\n 1 match found across 1 file \n');
+        return expect(o).to.be('\n 1 match found across 1 file \n Total size: 79 characters \n');
       });
     });
   });

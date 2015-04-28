@@ -61,4 +61,4 @@ describe 'BaseReporter', ->
             
         it 'prints the correct results if matches were found', ->
             helpers.safeTestOutput Inspector, TestReporter, 'intersection', (o) -> 
-                expect(o).to.be '\n 1 match found across 1 file \n'
+                expect(o).to.be '\n 1 match found across 1 file \n Total size: 79 characters \n'

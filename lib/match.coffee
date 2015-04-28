@@ -14,6 +14,7 @@ class Match
     ###
     constructor: (@nodes, diffType) ->
         @diffs = []
+        @duplicationSize = Math.max.apply(null, n.size for n in @nodes)
 
     ###*
     # Uses diff to generate line-based diffs for the nodes, given an object
