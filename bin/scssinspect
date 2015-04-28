@@ -115,7 +115,8 @@ if (/[\\\/]/g.test(program.reporter)) {
     reporterType = reporters[program.reporter] || reporters.default;
 }
 new reporterType(inspector, {
-    diff        : program.diff
+    diff          : program.diff,
+    thresholdType : program.type
 });
 
 // Track the number of matches
