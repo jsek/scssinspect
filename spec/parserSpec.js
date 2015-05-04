@@ -35,11 +35,14 @@ describe('Parser', function() {
       return expect(o).to.be("\nMatch - 2 instances\n" + file + ":1,5\n" + file + ":7,15\n");
     });
   });
-  expectNoParsingErrors = function(fixtureName) {
-    return helpers.safeTestOutput(Inspector, DefaultReporter, fixtureName, {
-      diff: false,
-      ignoreSummary: true
-    }, function(o) {
+  expectNoParsingErrors = function(fixtureName, language) {
+    var options;
+    options = {
+      lang: language,
+      ignoreSummary: true,
+      diff: false
+    };
+    return helpers.safeTestOutput(Inspector, DefaultReporter, fixtureName, options, function(o) {
       return expect(o).to.be('');
     });
   };
@@ -67,7 +70,10 @@ describe('Parser', function() {
   it('should parse variables assignment without exception', function() {
     return expectNoParsingErrors('variables');
   });
-  return it('should parse base64 values without exception', function() {
+  it('should parse base64 values without exception', function() {
     return expectNoParsingErrors('base64');
+  });
+  return it('should parse legacy filter value without exception', function() {
+    return expectNoParsingErrors('msFilter', 'css');
   });
 });

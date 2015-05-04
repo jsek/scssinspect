@@ -32,8 +32,13 @@ describe 'Parser', ->
 
             """
 
-    expectNoParsingErrors = (fixtureName) ->
-        helpers.safeTestOutput Inspector, DefaultReporter, fixtureName, {diff: false, ignoreSummary: true}, (o) ->
+    expectNoParsingErrors = (fixtureName, language) ->
+        options = 
+            lang: language
+            ignoreSummary: true
+            diff: false
+
+        helpers.safeTestOutput Inspector, DefaultReporter, fixtureName, options, (o) ->
             expect(o).to.be ''
 
     it 'should parse stylesheet with import statements without exception', ->
@@ -62,3 +67,6 @@ describe 'Parser', ->
 
     it 'should parse base64 values without exception', ->
         expectNoParsingErrors 'base64'
+
+    it 'should parse legacy filter value without exception', ->
+        expectNoParsingErrors 'msFilter', 'css'

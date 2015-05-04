@@ -1060,7 +1060,7 @@ syntaxes.css = {
         if ((l = this.checkAtkeyword(i)) && tokens[i + 1].value === 'media') i += l;
         else return 0;
         if (l = this.checkSC(i)) i += l;
-        if (l = this.checkArguments(i)) i += l;
+        if (l = this.checkArguments && this.checkArguments(i)) i += l;
         if (l = this.checkSC(i)) i += l;
         if (l = this.checkBlock(i)) i += l;
         else return 0;
@@ -1070,7 +1070,7 @@ syntaxes.css = {
         var startPos = pos,
             x = [NodeType.MediaQueryType, this.getAtkeyword()];
         x = x.concat(this.getSC());
-        if (this.checkArguments(pos)) x.push(this.getArguments());
+        if (this.checkArguments && this.checkArguments(pos)) x.push(this.getArguments());
         x = x.concat(this.getSC());
         if (this.checkBlock(pos)) x.push(this.getBlock());
         return needInfo ? (x.unshift(getInfo(startPos)), x) : x;
@@ -1278,10 +1278,16 @@ syntaxes.css = {
     },
     checkProgid: function(i) {
         var start = i,
+            prefix = 'progid:DXImageTransform.Microsoft.',
             l;
         if (i >= tokensLength) return 0;
         if (l = this.checkSC(i)) i += l;
-        if (joinValues2(i, 6) === 'progid:DXImageTransform.Microsoft.') i += 6;
+        if (joinValues2(i, 6) === prefix) i += 6;
+        else if (tokens[i].value.indexOf(prefix) > -1) {
+            var end = i + 1;
+            tokens[start].progid_end = end;
+            return end - start;
+        }
         else return 0;
         if (l = this.checkIdent(i)) i += l;
         else return 0;
