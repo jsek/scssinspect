@@ -8,12 +8,6 @@ chalk   = require('chalk')
 ###
 class BaseReporter
 
-    ###*
-    # @constructor
-    #
-    # @param {Inspector} inspector The instance on which to register its listeners
-    # @param {object}    opts      Options to set for the reporter
-    ###
     constructor: (@_inspector, opts = {}) ->
         @_found = 0
         @_skipped = 0
@@ -38,8 +32,6 @@ class BaseReporter
     # Registers a listener to the "match" event exposed by the Inspector instance.
     # Increments _found for each match emitted, and invokes the object's
     # _getOutput method, writing it to stdout.
-    #
-    # @private
     ###
     _registerListener: ->
         @_inspector.on 'match', (match) =>
@@ -77,9 +69,6 @@ class BaseReporter
     # added, a boolean indicating if it were an addition, and removed, for if it
     # were removed from the src. The formatted diff is padded and uses "+" and "-"
     # for indicating the addition and removal of lines.
-    #
-    # @param   {Object} diff The diff object to format
-    # @returns {string} A formatted diff
     ###
     _getFormattedDiff: (diff) ->
         output = ''
@@ -104,9 +93,6 @@ class BaseReporter
     ###*
     # Returns a string containing the path to the file in which the node is
     # located, as well as the lines on which the node exists.
-    #
-    # @param   {Node}   node The node from which to get a formatted source
-    # @returns {string} The formatted string
     ###
     _getFormattedLocation: (node) ->
         filePath = node.loc.source

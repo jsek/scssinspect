@@ -7,11 +7,6 @@ strip   = require('strip-indent')
 ###
 class Match
 
-    ###*
-    # @constructor
-    #
-    # @param {Node[]} nodes An array of matching nodes
-    ###
     constructor: (@nodes, @duplicationSize) ->
         @diffs = []
 
@@ -21,8 +16,6 @@ class Match
     # nodes, 2-way diffs are generated for each against the first node in the
     # array. The diffs are pushed into the diffs array in the same order as
     # the nodes.
-    #
-    # @param {object} fileContents The file paths and their contents
     ###
     generateDiffs : (fileContents, diffType) ->
         base = @_getLines(fileContents, @nodes[0])
@@ -35,9 +28,6 @@ class Match
 
     ###*
     # Returns a method from diff object for the given type.
-    #
-    # @param   {String} diffType The type of diff to show
-    # @returns {function} The method to diff the code
     ###
     _getMethod : (diffType) ->
         if diffType is 'css'
@@ -49,10 +39,6 @@ class Match
 
     ###*
     # Returns a string containing the source lines for the supplied node.
-    #
-    # @param   {object} fileContents The file paths and their contents
-    # @param   {Node}   node         The node for which to extract its lines
-    # @returns {String} The lines corresponding to the node's body
     ###
     _getLines : (fileContents, node) ->
         lines = fileContents[node.loc.source]
