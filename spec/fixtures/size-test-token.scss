@@ -1,0 +1,19 @@
+.a { 
+	.a { background: blue }
+	.b { color: red }
+}
+
+.a-b-c {
+	.c-b-a { color: red }
+	.x-y-z { background: blue }
+}
+
+.a-b-c {
+	.c-b-a { color: yellow }
+	.x-y-z { background: yellow }
+}
+
+.a-b-c {
+	.x-y-z { background: yellow }
+	.c-b-a { color: yellow }
+}

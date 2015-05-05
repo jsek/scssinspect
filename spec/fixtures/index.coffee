@@ -26,6 +26,8 @@ fixtures        =
         'negative-values'
         'nested-functions'
         'no-match'
+        'size-test-char'
+        'size-test-token'
         'variables'
     ]
     css: [

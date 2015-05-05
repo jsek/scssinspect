@@ -12,9 +12,8 @@ class Match
     #
     # @param {Node[]} nodes An array of matching nodes
     ###
-    constructor: (@nodes, diffType) ->
+    constructor: (@nodes, @duplicationSize) ->
         @diffs = []
-        @duplicationSize = Math.max.apply(null, n.size for n in @nodes)
 
     ###*
     # Uses diff to generate line-based diffs for the nodes, given an object

@@ -200,7 +200,7 @@ describe('Inspector', function() {
       return expectMatchCount(fixtures['anonymize-number'], opts, 0);
     });
   });
-  return describe('anonymize (selector)', function() {
+  describe('anonymize (selector)', function() {
     it('matches rules if the only difference are selectors', function() {
       var opts;
       opts = {
@@ -218,6 +218,68 @@ describe('Inspector', function() {
         anonymize: ['string']
       };
       return expectMatchCount(fixtures['anonymize-selector'], opts, 0);
+    });
+  });
+  describe('size (char)', function() {
+    var localThreshold;
+    localThreshold = 69;
+    it('should be correct value when type is "char" and called with default settings', function() {
+      var opts;
+      opts = {
+        threshold: localThreshold,
+        thresholdType: 'char',
+        anonymize: []
+      };
+      return expectMatchCount(fixtures['size-test-char'], opts, 1);
+    });
+    it('should be correct value when type is "char" and called with anonymized classes', function() {
+      var opts;
+      opts = {
+        threshold: localThreshold,
+        thresholdType: 'char',
+        anonymize: ['class']
+      };
+      return expectMatchCount(fixtures['size-test-char'], opts, 2);
+    });
+    return it('should use highest possible threshold for this spec', function() {
+      var opts;
+      opts = {
+        threshold: localThreshold + 2,
+        thresholdType: 'token',
+        anonymize: ['class']
+      };
+      return expectMatchCount(fixtures['size-test-token'], opts, 0);
+    });
+  });
+  return describe('size (token)', function() {
+    var localThreshold;
+    localThreshold = 40;
+    it('should be correct value when type is "token" and called with default settings', function() {
+      var opts;
+      opts = {
+        threshold: localThreshold,
+        thresholdType: 'token',
+        anonymize: []
+      };
+      return expectMatchCount(fixtures['size-test-token'], opts, 1);
+    });
+    it('should be correct value when type is "token" and called with anonymized classes', function() {
+      var opts;
+      opts = {
+        threshold: localThreshold,
+        thresholdType: 'token',
+        anonymize: ['class']
+      };
+      return expectMatchCount(fixtures['size-test-token'], opts, 2);
+    });
+    return it('should use highest possible threshold for this spec', function() {
+      var opts;
+      opts = {
+        threshold: localThreshold + 2,
+        thresholdType: 'token',
+        anonymize: ['class']
+      };
+      return expectMatchCount(fixtures['size-test-token'], opts, 0);
     });
   });
 });

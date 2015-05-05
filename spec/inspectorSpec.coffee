@@ -190,3 +190,53 @@ describe 'Inspector', ->
                 thresholdType: 'property'
                 anonymize: ['string']
             expectMatchCount fixtures['anonymize-selector'], opts, 0
+
+    describe 'size (char)', ->
+        
+        localThreshold = 69
+        
+        it 'should be correct value when type is "char" and called with default settings', ->
+            opts =
+                threshold: localThreshold
+                thresholdType: 'char'
+                anonymize: []
+            expectMatchCount fixtures['size-test-char'], opts, 1
+
+        it 'should be correct value when type is "char" and called with anonymized classes', ->
+            opts =
+                threshold: localThreshold
+                thresholdType: 'char'
+                anonymize: ['class']
+            expectMatchCount fixtures['size-test-char'], opts, 2
+
+        it 'should use highest possible threshold for this spec', ->
+            opts =
+                threshold: localThreshold + 2
+                thresholdType: 'token'
+                anonymize: ['class']
+            expectMatchCount fixtures['size-test-token'], opts, 0
+            
+    describe 'size (token)', ->
+        
+        localThreshold = 40
+        
+        it 'should be correct value when type is "token" and called with default settings', ->
+            opts =
+                threshold: localThreshold
+                thresholdType: 'token'
+                anonymize: []
+            expectMatchCount fixtures['size-test-token'], opts, 1
+
+        it 'should be correct value when type is "token" and called with anonymized classes', ->
+            opts =
+                threshold: localThreshold
+                thresholdType: 'token'
+                anonymize: ['class']
+            expectMatchCount fixtures['size-test-token'], opts, 2
+
+        it 'should use highest possible threshold for this spec', ->
+            opts =
+                threshold: localThreshold + 2
+                thresholdType: 'token'
+                anonymize: ['class']
+            expectMatchCount fixtures['size-test-token'], opts, 0
