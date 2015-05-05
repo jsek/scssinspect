@@ -6,6 +6,9 @@ BaseReporter = require('./base')
 ###
 class HtmlReporter extends BaseReporter
 
+    ###*
+    # Open HTML file at the beginning.
+    ###
     constructor: (inspector, opts = {}) ->
         super inspector, opts
         @_diff = opts.diff
@@ -20,6 +23,9 @@ class HtmlReporter extends BaseReporter
             """
         @_registerSummary()
 
+    ###*
+    # Returns HTML report content. The <header> tag contains all statistics.
+    ###   
     _getOutput: (match) ->
         nodes = match.nodes
         output = """
@@ -48,12 +54,20 @@ class HtmlReporter extends BaseReporter
             
         return output
 
+    ###*
+    # Returns formatted warning message.
+    ###
     _getWarning: (warn) ->
         return "<div class='warn'><b>WARNING</b>: #{warn.message} <span class='warn-file'>#{warn.path}</span><br> &gt; #{warn.error.message}</div>"
 
+    ###*
+    # @override
+    # Returns formatted summary message in <footer> and closes HTML file.
+    ###
     _registerSummary: ->
         @_inspector.on 'end', =>
             found = ''
+            total = ''
             numFiles = @_inspector.numFiles
             checked = "#{numFiles} #{@_pluralize(numFiles,'file')}"
             skipped = if @_skipped then "<span class='skipped'>#{@_skipped} #{@_pluralize(@_skipped,'file')} skipped</span>" else ''
@@ -61,14 +75,19 @@ class HtmlReporter extends BaseReporter
             unless @_found
                 found = "<span class='success'>No matches found across #{checked}</span>"
             else
-                found = "<span class='failure'>#{@_found} #{@_pluralizeE(@_found,'match')} found across #{checked}</span>"
+                total = "Total size: #{@_totalSize} #{@_pluralize(@_totalSize,@_thresholdTypeName)}"
+                found = "<span class='failure'>#{@_found} #{@_pluralizeE(@_found,'match')} found across #{checked} (#{total})</span>"
             
             process.stdout.write '<footer>' + found + skipped + '</footer>'
             process.stdout.write """
                 </body>
                 </html>
                 """
-            
+         
+    ###*
+    # @override
+    # Returns formatted diff to be placed in <pre> tag.
+    ###   
     _getFormattedDiff: (diff) ->
         output = '\n'
         diffLength = 0

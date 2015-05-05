@@ -9,12 +9,6 @@ BaseReporter = require('./base')
 ###
 class DefaultReporter extends BaseReporter
 
-    ###*
-    # @constructor
-    #
-    # @param {Inspector} inspector The instance on which to register its listeners
-    # @param {object}    opts      Options to set for the reporter
-    ###
     constructor: (inspector, opts = {}) ->
         super inspector, opts
         @_diff = opts.diff
@@ -25,11 +19,6 @@ class DefaultReporter extends BaseReporter
     # contains the number of instances associated with the match and the files
     # and lines involved. If diffs are enabled, 2-way diffs are formatted and
     # included.
-    #
-    # @private
-    #
-    # @param   {Match}  match The inspector match to output
-    # @returns {string} The formatted output
     ###
     _getOutput: (match) ->
         nodes = match.nodes
@@ -53,12 +42,7 @@ class DefaultReporter extends BaseReporter
         return output
 
     ###*
-    # Returns the formatted warning message.
-    #
-    # @private
-    #
-    # @param   {Match}  match The inspector match to output
-    # @returns {string} The formatted output
+    # Returns formatted warning message.
     ###
     _getWarning: (warn) ->
         return chalk.yellow "#{chalk.bold 'WARNING'}: #{warn.message} #{chalk.cyan warn.path}\n > #{warn.error.message}\n"
