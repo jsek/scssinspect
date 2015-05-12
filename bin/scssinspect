@@ -82,7 +82,8 @@ var paths;
 try {
     paths = filepaths.getSync(suppliedPaths, {
         suffix: '.' + program.lang,
-        ignore: ignorePatterns
+        ignore: ignorePatterns,
+        localIgnoreFile: '.scssinspectignore'
     });
 } catch (e) {
     console.log(e.message);
