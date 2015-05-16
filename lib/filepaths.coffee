@@ -63,7 +63,7 @@ exports.getSync = (paths, opts) ->
     results = []
     
     localIgnorePatterns  = {}
-    globalIgnorePatterns = opts.ignore.map (i) -> new RegExp(i)
+    globalIgnorePatterns = opts.ignore?.map((i) -> new RegExp(i)) or []
     
     for path in paths
         if !fs.existsSync(path)
