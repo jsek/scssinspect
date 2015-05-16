@@ -87,6 +87,15 @@ be used in place of the defaults listed above. For example:
 }
 ```
 
+You can use _ignore_ parameter to set one pattern as well as multiple a `.scssinspectignore` files with patterns applied locally (for current directory and children).
+Example `.scssinspectignore` may look like this:
+
+```
+lib
+**/_legacy/**
+vendor/**/*.css
+```
+
 ## Integration
 
 Example for Travis CI. Expected Entries in your `.travis.yml`:
