@@ -8,7 +8,7 @@ astToCSS        = require('../lib/printer').astToCSS
 describe 'Printer', ->
 
     expectPrinterOutput = (fixtureName) ->
-        filePath    = fixtures[fixtureName].replace(/\//g,'\\')
+        filePath    = fixtures[fixtureName]
         css         = fs.readFileSync(filePath, encoding: 'utf8')
         syntaxTree  = cssToAST(css: css, syntax: 'scss')
         text        = astToCSS(ast: syntaxTree, syntax: 'scss')

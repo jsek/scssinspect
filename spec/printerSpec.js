@@ -14,7 +14,7 @@ describe('Printer', function() {
   var expectPrinterOutput;
   expectPrinterOutput = function(fixtureName) {
     var css, filePath, goldText, syntaxTree, text;
-    filePath = fixtures[fixtureName].replace(/\//g, '\\');
+    filePath = fixtures[fixtureName];
     css = fs.readFileSync(filePath, {
       encoding: 'utf8'
     });

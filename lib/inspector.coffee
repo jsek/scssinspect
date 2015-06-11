@@ -46,7 +46,6 @@ class Inspector extends EventEmitter
         @emit 'start'
 
         for filePath in @_filePaths
-            filePath = filePath.replace /\//g,'\\'
             contents = fs.readFileSync(filePath, opts)
             unless @_diff is 'none'
                 @_fileContents[filePath] = contents.split('\n')

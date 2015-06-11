@@ -1,11 +1,12 @@
 fs   = require('fs')
-sep  = require('path').sep
+path = require('path')
 file = require('file')
+sep  = path.sep
 
 
 getFilePath = (file, dirPath) ->
     if /(^[A-Za-z]:)/g.test(dirPath)
-        return dirPath + '\\' + file
+        return path.normalize(dirPath + '/' + file)
     else
         if dirPath.slice(-1) != sep
             dirPath += sep
@@ -45,12 +46,11 @@ mergeIgnorePatterns = (globalPatterns, localPatterns, dirPath) ->
 findLocalIgnorePatterns = (localIgnorePatterns, dirPath, files, specialFileName) ->
     if files.filter((f) -> f is specialFileName).length > 0
         localIgnorePatterns[dirPath] = fs
-            .readFileSync(dirPath + '\\' + specialFileName, encoding: 'utf8')
+            .readFileSync(path.normalize(dirPath + '/' + specialFileName), encoding: 'utf8')
             .replace('**', '.*')
             .replace('/*.', '/.*.')
-            .replace('/', '\\')
             .split('\n')
-            .map (i) -> i.trim()
+            .map (i) -> path.normalize i.trim()
             .filter (i) -> i.length
             .map (i) -> new RegExp(i)
 
